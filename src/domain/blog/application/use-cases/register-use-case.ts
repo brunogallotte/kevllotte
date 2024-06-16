@@ -22,7 +22,14 @@ export class RegisterUseCase {
     name,
     email,
     password,
-  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
+    bio,
+    avatarUrl,
+    githubUrl,
+    twitterUrl,
+    websiteUrl,
+    linkedinUrl,
+    instagramUrl,
+  }: Prisma.UserCreateInput): Promise<RegisterUseCaseResponse> {
     const passwordHash = await hash(password, 6)
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
@@ -38,6 +45,13 @@ export class RegisterUseCase {
       name,
       email,
       password: passwordHash,
+      bio,
+      avatarUrl,
+      githubUrl,
+      twitterUrl,
+      websiteUrl,
+      linkedinUrl,
+      instagramUrl,
     })
 
     return right({ user })
