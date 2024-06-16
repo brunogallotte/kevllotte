@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 
 import { Either, left, right } from '@/core/either'
 
-import type { UsersRepository } from '../repositories/prisma/users-repository'
+import type { UsersRepository } from '../repositories/users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 export type RegisterUseCaseRequest = {

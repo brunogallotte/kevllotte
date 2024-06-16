@@ -1,10 +1,20 @@
 import type { Prisma, User } from '@prisma/client'
 import { randomUUID } from 'crypto'
 
-import type { UsersRepository } from '@/domain/blog/application/repositories/prisma/users-repository'
+import type { UsersRepository } from '@/domain/blog/application/repositories/users-repository'
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []
+
+  async findById(id: string) {
+    const user = this.items.find((user) => user.id === id)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 
   async findByEmail(email: string) {
     const user = this.items.find((user) => user.email === email)
