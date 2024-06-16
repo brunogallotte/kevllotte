@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { UserNotFound } from '@/domain/blog/application/use-cases/errors/user-not-found'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { makeAuthenticateUseCase } from '@/domain/blog/application/use-cases/factories/authenticate-use-case'
 
 export async function authenticate(
@@ -22,7 +22,7 @@ export async function authenticate(
     email,
   })
 
-  if (authenticateUser.value instanceof UserNotFound) {
+  if (authenticateUser.value instanceof ResourceNotFoundError) {
     return reply.status(404).send()
   }
 

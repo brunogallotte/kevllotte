@@ -6,6 +6,8 @@ import { Either, left, right } from '@/core/either'
 import type { UsersRepository } from '../repositories/users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
+export type RegisterUseCaseRequest = Prisma.UserCreateInput
+
 type RegisterUseCaseResponse = Either<
   UserAlreadyExistsError,
   {
@@ -32,7 +34,10 @@ export class RegisterUseCase {
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
+    console.log(userWithSameEmail)
+
     if (userWithSameEmail) {
+      console.log(left(new UserAlreadyExistsError()).value)
       return left(new UserAlreadyExistsError())
     }
 

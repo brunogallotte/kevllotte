@@ -4,5 +4,5 @@ export type UsersRepository = {
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
   create(data: Prisma.UserCreateInput): Promise<User>
-  update(data: Prisma.UserUpdateInput): Promise<User>
+  update(data: User): Promise<User>
 }
