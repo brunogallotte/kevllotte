@@ -1,19 +1,21 @@
-import { makeRegisterUseCase } from '@/domain/blog/application/use-cases/factories/make-register-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
+
+import { UserAlreadyExistsError } from '@/domain/blog/application/use-cases/errors/user-already-exists-error'
+import { makeRegisterUseCase } from '@/domain/blog/application/use-cases/factories/make-register-use-case'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
-    bio: z.string().nullable(),
     password: z.string().min(8),
-    avatarUrl: z.string().url().nullable(),
-    linkedinUrl: z.string().url().nullable(),
-    githubUrl: z.string().url().nullable(),
-    instagramUrl: z.string().url().nullable(),
-    twitterUrl: z.string().url().nullable(),
-    websiteUrl: z.string().url().nullable(),
+    bio: z.string().optional(),
+    avatarUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    githubUrl: z.string().optional(),
+    instagramUrl: z.string().optional(),
+    twitterUrl: z.string().optional(),
+    websiteUrl: z.string().optional(),
   })
 
   const {
@@ -29,20 +31,24 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     websiteUrl,
   } = registerBodySchema.parse(request.body)
 
-  try {
-    const registerUseCase = makeRegisterUseCase()
+  const registerUseCase = makeRegisterUseCase()
 
-    await registerUseCase.execute({
-      name,
-      email,
-      passwordHash: password,
-      bio,
-      avatarUrl,
-      linkedinUrl,
-      githubUrl,
-      instagramUrl,
-      twitterUrl,
-      websiteUrl,
-    })
+  const createUser = await registerUseCase.execute({
+    name,
+    email,
+    password,
+    bio,
+    avatarUrl,
+    linkedinUrl,
+    githubUrl,
+    instagramUrl,
+    twitterUrl,
+    websiteUrl,
+  })
+
+  if (createUser.value instanceof UserAlreadyExistsError) {
+    return reply.status(409).send()
   }
+
+  return reply.status(201).send()
 }

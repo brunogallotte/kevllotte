@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
 
@@ -11,9 +11,10 @@ export class PrismaUsersRepository implements UsersRepository {
         name: data.name,
         email: data.email,
         bio: data.bio,
-        passwordHash: data.passwordHash,
+        password: data.password,
         avatarUrl: data.avatarUrl,
         githubUrl: data.githubUrl,
+        linkedinUrl: data.linkedinUrl,
         instagramUrl: data.instagramUrl,
         twitterUrl: data.twitterUrl,
         websiteUrl: data.websiteUrl,
@@ -31,6 +32,15 @@ export class PrismaUsersRepository implements UsersRepository {
 
   async findByEmail(email: string) {
     const user = await prisma.user.findUnique({ where: { email } })
+
+    return user
+  }
+
+  async update(data: User) {
+    const user = await prisma.user.update({
+      where: { id: data.id },
+      data,
+    })
 
     return user
   }
