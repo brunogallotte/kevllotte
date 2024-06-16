@@ -1,8 +1,9 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+
 import { AuthenticateUseCase } from './authenticate-use-case'
-import { UserNotFound } from './errors/user-not-found'
 import { RegisterUseCase } from './register-use-case'
 
 describe('Authenticate Use Case', async () => {
@@ -51,7 +52,7 @@ describe('Authenticate Use Case', async () => {
     })
 
     if (authenticateUser.isLeft()) {
-      expect(authenticateUser.value).toBeInstanceOf(UserNotFound)
+      expect(authenticateUser.value).toBeInstanceOf(ResourceNotFoundError)
     }
   })
 
@@ -62,7 +63,7 @@ describe('Authenticate Use Case', async () => {
     })
 
     if (authenticateUser.isLeft()) {
-      expect(authenticateUser.value).toBeInstanceOf(UserNotFound)
+      expect(authenticateUser.value).toBeInstanceOf(ResourceNotFoundError)
     }
   })
 })
