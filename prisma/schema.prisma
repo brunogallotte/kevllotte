@@ -11,7 +11,7 @@ model User {
   id           String         @id @default(uuid())
   name         String
   email        String         @unique
-  passwordHash String         @map("password_hash")
+  password     String         @map("password_hash")
   bio          String?
   avatarUrl    String?        @map("avatar_url")
   linkedinUrl  String?        @map("linkedin_url")
@@ -52,7 +52,7 @@ model Post {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   status      PostStatus    @default(DRAFT)
-  User        User          @relation(fields: [userId], references: [id])
+  User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SavedPost   SavedPost[]
   LikedPost   LikedPost[]
   CommentPost CommentPost[]

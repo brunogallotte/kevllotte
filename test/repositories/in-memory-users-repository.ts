@@ -47,4 +47,18 @@ export class InMemoryUsersRepository implements UsersRepository {
 
     return user
   }
+
+  async update(data: User) {
+    const userToUpdateIndex = this.items.findIndex(
+      (item) => item.id === data.id,
+    )
+
+    const updatedUser = {
+      ...data,
+    }
+
+    this.items.splice(userToUpdateIndex, 1, updatedUser)
+
+    return updatedUser
+  }
 }
