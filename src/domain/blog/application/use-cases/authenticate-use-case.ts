@@ -2,9 +2,9 @@ import type { User } from '@prisma/client'
 import { compare } from 'bcryptjs'
 
 import { Either, left, right } from '@/core/either'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 import type { UsersRepository } from '../repositories/users-repository'
-import { UserNotFound } from './errors/user-not-found'
 
 type AuthenticateUseCaseRequest = {
   email: string
@@ -12,7 +12,7 @@ type AuthenticateUseCaseRequest = {
 }
 
 type AuthenticateUseCaseResponse = Either<
-  UserNotFound,
+  ResourceNotFoundError,
   {
     user: User
   }
@@ -28,13 +28,13 @@ export class AuthenticateUseCase {
     const hasUser = await this.usersRepository.findByEmail(email)
 
     if (!hasUser) {
-      return left(new UserNotFound())
+      return left(new ResourceNotFoundError())
     }
 
     const passwordMatch = await compare(password, hasUser.password)
 
     if (!passwordMatch) {
-      return left(new UserNotFound())
+      return left(new ResourceNotFoundError())
     }
 
     return right({ user: hasUser })

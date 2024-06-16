@@ -32,4 +32,18 @@ export class InMemoryPostsRepository implements PostsRepository {
 
     return post
   }
+
+  async update(data: Post) {
+    const postToUpdateIndex = this.items.findIndex(
+      (item) => item.id === data.id,
+    )
+
+    const updatedPost = {
+      ...data,
+    }
+
+    this.items.splice(postToUpdateIndex, 1, updatedPost)
+
+    return updatedPost
+  }
 }
