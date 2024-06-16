@@ -42,8 +42,6 @@ export class EditUserProfileUseCase {
       ...props,
     })
 
-    console.log({ ...user, ...props })
-
     return right({ updatedUser })
   }
 }
