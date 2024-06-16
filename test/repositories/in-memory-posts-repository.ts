@@ -1,6 +1,7 @@
 import type { Post, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 
+import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { PostsRepository } from '@/domain/blog/application/repositories/posts-repository'
 
 export class InMemoryPostsRepository implements PostsRepository {
@@ -14,6 +15,14 @@ export class InMemoryPostsRepository implements PostsRepository {
     }
 
     return post
+  }
+
+  async findManyByUserId(userId: string, { page }: PaginationParams) {
+    const posts = this.items
+      .filter((item) => item.userId === userId)
+      .slice((page - 1) * 20, page * 20)
+
+    return posts
   }
 
   async create(data: Prisma.PostUncheckedCreateInput) {
