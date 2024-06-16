@@ -1,4 +1,5 @@
 import { compare } from 'bcryptjs'
+import { randomUUID } from 'crypto'
 import { makeRegister } from 'test/factories/makeRegister'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 
@@ -16,6 +17,7 @@ describe('Register', () => {
 
   it('should be able to register', async () => {
     const result = await sut.execute({
+      id: randomUUID(),
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123456',
