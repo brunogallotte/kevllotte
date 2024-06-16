@@ -2,15 +2,23 @@ import type { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
 import { Either, left, right } from '@/core/either'
+import type { Optional } from '@/core/types/optional'
 
 import type { UsersRepository } from '../repositories/users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
-export type RegisterUseCaseRequest = {
-  name: string
-  email: string
-  password: string
-}
+export type RegisterUseCaseRequest = Optional<
+  User,
+  | 'bio'
+  | 'avatarUrl'
+  | 'githubUrl'
+  | 'twitterUrl'
+  | 'websiteUrl'
+  | 'linkedinUrl'
+  | 'instagramUrl'
+  | 'createdAt'
+  | 'updatedAt'
+>
 
 type RegisterUseCaseResponse = Either<
   UserAlreadyExistsError,
