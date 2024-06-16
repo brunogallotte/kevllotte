@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,4 +7,117 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-User {}
+model User {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  bio          String?
+  avatarUrl    String?        @map("avatar_url")
+  linkedinUrl  String?        @map("linkedin_url")
+  githubUrl    String?        @map("github_url")
+  instagramUrl String?        @map("instagram_url")
+  twitterUrl   String?        @map("twitter_url")
+  websiteUrl   String?        @map("website_url")
+  password     String
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  posts        Post[]
+  followers    Follower[]     @relation("followers")
+  following    Follower[]     @relation("following")
+  SavedPost    SavedPost[]
+  LikedPost    LikedPost[]
+  CommentPost  CommentPost[]
+  Notification Notification[]
+
+  @@map("users")
+}
+
+model Follower {
+  id              String   @id @default(uuid())
+  followerUserId  String   @map("follower_user_id")
+  followingUserId String   @map("following_user_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  follower        User     @relation("followers", fields: [followerUserId], references: [id])
+  followingUser   User     @relation("following", fields: [followingUserId], references: [id])
+
+  @@map("followers")
+}
+
+model Post {
+  id          String        @id @default(uuid())
+  title       String
+  content     String
+  userId      String        @map("user_id")
+  collabId    String?       @map("collab_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  status      PostStatus    @default(DRAFT)
+  User        User          @relation(fields: [userId], references: [id])
+  SavedPost   SavedPost[]
+  LikedPost   LikedPost[]
+  CommentPost CommentPost[]
+  TagPost     TagPost[]
+
+  @@map("posts")
+}
+
+model SavedPost {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  User      User     @relation(fields: [userId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("saved_posts")
+}
+
+model LikedPost {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  User      User     @relation(fields: [userId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("liked_posts")
+}
+
+model CommentPost {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  postId    String   @map("post_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User     @relation(fields: [userId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("comment_posts")
+}
+
+model TagPost {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  postId    String   @map("post_id")
+  Post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("tag_posts")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
