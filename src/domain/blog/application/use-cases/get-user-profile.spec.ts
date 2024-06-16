@@ -21,7 +21,7 @@ describe('Get User Profile', () => {
     const createdUser = await inMemoryUsersRepository.create({
       name: faker.person.firstName(),
       email: faker.internet.email(),
-      passwordHash,
+      password: passwordHash,
     })
 
     const result = await sut.execute({

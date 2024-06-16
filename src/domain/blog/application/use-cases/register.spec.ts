@@ -54,7 +54,7 @@ describe('Register', () => {
     if (result.isRight()) {
       const isPasswordCorrectlyHashed = await compare(
         '123456',
-        result.value.user.passwordHash,
+        result.value.user.password,
       )
 
       expect(isPasswordCorrectlyHashed).toBe(true)
