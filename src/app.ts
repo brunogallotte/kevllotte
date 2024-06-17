@@ -31,7 +31,7 @@ app.register(fastifySwagger, {
     },
     components: {
       securitySchemes: {
-        barearAuth: {
+        bearerAuth: {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',

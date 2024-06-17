@@ -2,11 +2,10 @@ import type { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { authenticateBodySchema, registerBodySchema } from '@/http/schemas'
-
 import { authenticate } from './authenticate'
 import { refresh } from './refresh'
 import { register } from './register'
+import { authenticateBodySchema, registerBodySchema } from './schemas'
 
 export async function userRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
