@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
-import { AuthenticateUseCase } from './authenticate-use-case'
-import { RegisterUseCase } from './register-use-case'
+import { AuthenticateUseCase } from './authenticate'
+import { RegisterUseCase } from './register'
 
 describe('Authenticate Use Case', async () => {
   let usersRepository: InMemoryUsersRepository

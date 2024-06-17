@@ -34,10 +34,7 @@ export class RegisterUseCase {
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
-    console.log(userWithSameEmail)
-
     if (userWithSameEmail) {
-      console.log(left(new UserAlreadyExistsError()).value)
       return left(new UserAlreadyExistsError())
     }
 

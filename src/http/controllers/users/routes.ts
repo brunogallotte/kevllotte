@@ -1,13 +1,14 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { authenticate } from './controllers/authenticate'
-import { refresh } from './controllers/refresh'
-import { register } from './controllers/register'
-import { authenticateBodySchema, registerBodySchema } from './schemas'
+import { authenticateBodySchema, registerBodySchema } from '@/http/schemas'
 
-export async function appRoutes(app: FastifyInstance) {
+import { authenticate } from './authenticate'
+import { refresh } from './refresh'
+import { register } from './register'
+
+export async function userRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
     '/users',
     {
@@ -57,4 +58,6 @@ export async function appRoutes(app: FastifyInstance) {
   )
 
   /** Authorized */
+  // TODO: Get User profile route
+  // app.get('/me', { onRequest: [verifyJWT] }, profile)
 }

@@ -12,7 +12,8 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { env } from './env'
-import { appRoutes } from './http/routes'
+import { postRoutes } from './http/controllers/posts/routes'
+import { userRoutes } from './http/controllers/users/routes'
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -58,4 +59,5 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie)
 
-app.register(appRoutes)
+app.register(userRoutes)
+app.register(postRoutes)
