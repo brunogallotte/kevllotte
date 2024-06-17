@@ -23,7 +23,7 @@ export async function userRoutes(app: FastifyInstance) {
     },
     register,
   )
-  app.post(
+  app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions',
     {
       schema: {
@@ -40,7 +40,7 @@ export async function userRoutes(app: FastifyInstance) {
     },
     authenticate,
   )
-  app.patch(
+  app.withTypeProvider<ZodTypeProvider>().patch(
     '/token/refresh',
     {
       schema: {

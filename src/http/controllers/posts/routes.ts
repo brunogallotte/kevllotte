@@ -7,5 +7,5 @@ import { create } from './create'
 export async function postRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
-  app.post('/posts', create)
+  // app.post('/posts', create)
 }
