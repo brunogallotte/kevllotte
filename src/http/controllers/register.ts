@@ -1,35 +1,25 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
 
 import { UserAlreadyExistsError } from '@/domain/blog/application/use-cases/errors/user-already-exists-error'
 import { makeRegisterUseCase } from '@/domain/blog/application/use-cases/factories/make-register-use-case'
 
+import { registerBodySchema } from '../schemas'
+
 export async function register(request: FastifyRequest, reply: FastifyReply) {
-  const registerBodySchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    password: z.string().min(8),
-    bio: z.string().optional(),
-    avatarUrl: z.string().optional(),
-    linkedinUrl: z.string().optional(),
-    githubUrl: z.string().optional(),
-    instagramUrl: z.string().optional(),
-    twitterUrl: z.string().optional(),
-    websiteUrl: z.string().optional(),
-  })
+  const body = registerBodySchema.parse(request.body)
 
   const {
     name,
     email,
-    bio,
     password,
+    bio,
     avatarUrl,
     linkedinUrl,
     githubUrl,
     instagramUrl,
     twitterUrl,
     websiteUrl,
-  } = registerBodySchema.parse(request.body)
+  } = body
 
   const registerUseCase = makeRegisterUseCase()
 
