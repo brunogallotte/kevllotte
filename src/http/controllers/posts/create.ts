@@ -6,8 +6,11 @@ import { makeCreatePostUseCase } from '@/domain/blog/application/use-cases/facto
 import { createPostBodySchema } from './schemas'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const { title, content, userId, collabId, status } =
-    createPostBodySchema.parse(request.body)
+  const userId = await request.getCurrentUserId()
+
+  const { title, content, collabId, status } = createPostBodySchema.parse(
+    request.body,
+  )
 
   const createPostUseCase = makeCreatePostUseCase()
 
@@ -23,5 +26,5 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send()
   }
 
-  return reply.status(201).send()
+  return reply.status(201).send({ postId: createdPost.value.post.id })
 }

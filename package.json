@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsx watch src/server.ts",
+    "start:dev": "tsx watch src/http/server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --ext .ts",
@@ -39,6 +39,7 @@
     "bcryptjs": "2.4.3",
     "dotenv": "16.4.5",
     "fastify": "4.28.0",
+    "fastify-plugin": "4.5.1",
     "fastify-type-provider-zod": "1.2.0",
     "vitest": "1.6.0",
     "zod": "3.23.8"

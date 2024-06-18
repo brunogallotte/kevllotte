@@ -11,14 +11,18 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
-import { env } from './env'
-import { postRoutes } from './http/controllers/posts/routes'
-import { userRoutes } from './http/controllers/users/routes'
+import { env } from '@/env'
+
+import { postRoutes } from './controllers/posts/routes'
+import { userRoutes } from './controllers/users/routes'
+import { errorHandler } from './error-handler'
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
+
+app.setErrorHandler(errorHandler)
 
 app.register(fastifyCors)
 

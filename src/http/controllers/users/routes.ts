@@ -2,7 +2,10 @@ import type { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { auth } from '@/http/middlewares/auth'
+
 import { authenticate } from './authenticate'
+import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
 import { authenticateBodySchema, registerBodySchema } from './schemas'
@@ -12,7 +15,7 @@ export async function userRoutes(app: FastifyInstance) {
     '/users',
     {
       schema: {
-        tags: ['authenticate'],
+        tags: ['Authentication'],
         summary: 'Register a new user',
         body: registerBodySchema,
         response: {
@@ -22,11 +25,12 @@ export async function userRoutes(app: FastifyInstance) {
     },
     register,
   )
+
   app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions',
     {
       schema: {
-        tags: ['authenticate'],
+        tags: ['Authentication'],
         summary: 'Authenticate a user',
         security: [{ bearerAuth: [] }],
         body: authenticateBodySchema,
@@ -39,11 +43,12 @@ export async function userRoutes(app: FastifyInstance) {
     },
     authenticate,
   )
+
   app.withTypeProvider<ZodTypeProvider>().patch(
     '/token/refresh',
     {
       schema: {
-        tags: ['authenticate'],
+        tags: ['Authentication'],
         summary: 'Refresh a user token',
         security: [{ bearerAuth: [] }],
         response: {
@@ -57,6 +62,38 @@ export async function userRoutes(app: FastifyInstance) {
   )
 
   /** Authorized */
-  // TODO: Get User profile route
-  // app.get('/me', { onRequest: [verifyJWT] }, profile)
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/me',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Get user profile details',
+          security: [{ bearerAuth: [] }],
+          response: {
+            200: z.object({
+              user: z.object({
+                id: z.string().uuid(),
+                name: z.string(),
+                email: z.string().email(),
+                bio: z.string().nullish(),
+                avatarUrl: z.string().nullish(),
+                linkedinUrl: z.string().nullish(),
+                githubUrl: z.string().nullish(),
+                instagramUrl: z.string().nullish(),
+                twitterUrl: z.string().nullish(),
+                websiteUrl: z.string().nullish(),
+                password: z.string(),
+                createdAt: z.date(),
+                updatedAt: z.date(),
+              }),
+            }),
+            400: z.null(),
+          },
+        },
+      },
+      profile,
+    )
 }
