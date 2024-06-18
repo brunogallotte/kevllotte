@@ -55,4 +55,8 @@ export class InMemoryPostsRepository implements PostsRepository {
 
     return updatedPost
   }
+
+  async delete(id: string) {
+    this.items = this.items.filter((item) => item.id !== id)
+  }
 }

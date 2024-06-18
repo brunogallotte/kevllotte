@@ -1,18 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
 
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { makeCreatePostUseCase } from '@/domain/blog/application/use-cases/factories/make-create-post-use-case'
 
-export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const createPostBodySchema = z.object({
-    title: z.string(),
-    content: z.string(),
-    userId: z.string().uuid(),
-    collabId: z.string().uuid().optional(),
-    status: z.enum(['PUBLISHED', 'DRAFT']).default('DRAFT'),
-  })
+import { createPostBodySchema } from './schemas'
 
+export async function create(request: FastifyRequest, reply: FastifyReply) {
   const { title, content, userId, collabId, status } =
     createPostBodySchema.parse(request.body)
 
