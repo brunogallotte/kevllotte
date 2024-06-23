@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { auth } from '@/http/middlewares/auth'
 
 import { authenticate } from './authenticate'
+import { deleteUser } from './delete'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
@@ -90,10 +91,33 @@ export async function userRoutes(app: FastifyInstance) {
                 updatedAt: z.date(),
               }),
             }),
-            400: z.null(),
+            400: z.object({
+              message: z.string(),
+            }),
           },
         },
       },
       profile,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/users/delete',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Delete user',
+          security: [{ bearerAuth: [] }],
+          response: {
+            201: z.null(),
+            400: z.object({
+              message: z.string(),
+            }),
+          },
+        },
+      },
+      deleteUser,
     )
 }

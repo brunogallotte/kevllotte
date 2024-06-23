@@ -28,6 +28,14 @@ export class PrismaPostsRepository implements PostsRepository {
     return posts
   }
 
+  async delete(id: string) {
+    await prisma.post.delete({
+      where: {
+        id,
+      },
+    })
+  }
+
   async create(data: Prisma.PostUncheckedCreateInput) {
     const post = await prisma.post.create({
       data,
@@ -44,11 +52,5 @@ export class PrismaPostsRepository implements PostsRepository {
     })
 
     return post
-  }
-
-  async delete(id: string) {
-    await prisma.post.delete({
-      where: { id },
-    })
   }
 }

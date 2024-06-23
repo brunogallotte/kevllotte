@@ -12,7 +12,7 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/post',
+      '/posts',
       {
         schema: {
           tags: ['Posts'],
