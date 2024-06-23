@@ -26,6 +26,10 @@ export class InMemoryUsersRepository implements UsersRepository {
     return user
   }
 
+  async delete(id: string) {
+    this.items = this.items.filter((item) => item.id !== id)
+  }
+
   async create(data: Prisma.UserCreateInput) {
     const user = {
       id: data.id ?? randomUUID(),

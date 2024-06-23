@@ -25,6 +25,10 @@ export class InMemoryPostsRepository implements PostsRepository {
     return posts
   }
 
+  async delete(id: string) {
+    this.items = this.items.filter((item) => item.id !== id)
+  }
+
   async create(data: Prisma.PostUncheckedCreateInput) {
     const post = {
       id: data.id ?? randomUUID(),
@@ -54,9 +58,5 @@ export class InMemoryPostsRepository implements PostsRepository {
     this.items.splice(postToUpdateIndex, 1, updatedPost)
 
     return updatedPost
-  }
-
-  async delete(id: string) {
-    this.items = this.items.filter((item) => item.id !== id)
   }
 }
