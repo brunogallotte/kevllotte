@@ -24,6 +24,8 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
     status: POST_STATUS[status],
   })
 
+  console.log(editedPost)
+
   if (editedPost.value instanceof ResourceNotFoundError) {
     return reply.status(400).send()
   }
@@ -32,5 +34,5 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(401).send()
   }
 
-  return reply.status(201).send({ post: editedPost.value.post })
+  return reply.status(200).send({ post: editedPost.value.post })
 }

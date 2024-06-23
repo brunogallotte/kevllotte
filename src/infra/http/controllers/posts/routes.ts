@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { auth } from '../../middlewares/auth'
 import { create } from './create'
+import { edit } from './edit'
 import { createPostBodySchema, editPostBodySchema } from './schemas'
 
 export async function postRoutes(app: FastifyInstance) {
@@ -30,11 +31,11 @@ export async function postRoutes(app: FastifyInstance) {
       {
         schema: {
           tags: ['Posts'],
-          summary: 'Create a post',
+          summary: 'Edit a post',
           security: [{ bearerAuth: [] }],
           body: editPostBodySchema,
         },
       },
-      create,
+      edit,
     )
 }
