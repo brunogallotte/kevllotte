@@ -1,46 +1,43 @@
-import type { Post, Prisma } from '@prisma/client'
+import { Either, right } from '@/core/either'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-import { Either, left, right } from '@/core/either'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-
+import { Post, type POST_STATUS } from '../../enterprise/entities/post'
 import type { PostsRepository } from '../repositories/posts-repository'
-import type { UsersRepository } from '../repositories/users-repository'
 
-export type CreatePostUseCaseRequest = Prisma.PostUncheckedCreateInput
+export type CreatePostUseCaseRequest = {
+  authorId: string
+  title: string
+  content: string
+  status: POST_STATUS
+  collabId?: string
+}
 
 type CreatePostUseCaseResponse = Either<
-  ResourceNotFoundError,
+  null,
   {
     post: Post
   }
 >
 
 export class CreatePostUseCase {
-  constructor(
-    private usersRepository: UsersRepository,
-    private postsRepository: PostsRepository,
-  ) {}
+  constructor(private postsRepository: PostsRepository) {}
 
   async execute({
+    authorId,
     title,
     content,
-    userId,
     status,
     collabId,
   }: CreatePostUseCaseRequest): Promise<CreatePostUseCaseResponse> {
-    const user = await this.usersRepository.findById(userId)
-
-    if (!user) {
-      return left(new ResourceNotFoundError())
-    }
-
-    const post = await this.postsRepository.create({
+    const post = Post.create({
+      authorId: new UniqueEntityID(authorId),
       title,
       content,
-      userId,
       status,
-      collabId,
+      collabId: collabId ? new UniqueEntityID(collabId) : undefined,
     })
+
+    await this.postsRepository.create(post)
 
     return right({ post })
   }

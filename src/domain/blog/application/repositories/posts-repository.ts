@@ -1,11 +1,14 @@
-import type { Post, Prisma } from '@prisma/client'
-
 import type { PaginationParams } from '@/core/repositories/pagination-params'
+
+import type { Post } from '../../enterprise/entities/post'
 
 export type PostsRepository = {
   findById(id: string): Promise<Post | null>
-  findManyByUserId(userId: string, params: PaginationParams): Promise<Post[]>
-  delete(id: string): Promise<void>
-  create(data: Prisma.PostUncheckedCreateInput): Promise<Post>
-  update(data: Post): Promise<Post>
+  findManyByAuthorId(
+    authorId: string,
+    params: PaginationParams,
+  ): Promise<Post[]>
+  delete(post: Post): Promise<void>
+  create(post: Post): Promise<void>
+  save(post: Post): Promise<void>
 }

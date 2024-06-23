@@ -1,20 +1,23 @@
-import type { Post } from '@prisma/client'
-
 import { Either, left, right } from '@/core/either'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
-import type { PostsRepository } from '../repositories/posts-repository'
+import { Post, type POST_STATUS } from '../../enterprise/entities/post'
+import { PostsRepository } from '../repositories/posts-repository'
 
-export type EditPostUseCaseRequest = {
+type EditPostUseCaseRequest = {
   postId: string
-  title?: string
-  content?: string
+  authorId: string
+  title: string
+  content: string
+  status: POST_STATUS
+  collabId?: string
 }
 
 type EditPostUseCaseResponse = Either<
-  ResourceNotFoundError,
+  ResourceNotFoundError | NotAllowedError,
   {
-    updatedPost: Post
+    post: Post
   }
 >
 
@@ -23,7 +26,11 @@ export class EditPostUseCase {
 
   async execute({
     postId,
-    ...props
+    authorId,
+    title,
+    content,
+    status,
+    // collabId,
   }: EditPostUseCaseRequest): Promise<EditPostUseCaseResponse> {
     const post = await this.postsRepository.findById(postId)
 
@@ -31,11 +38,18 @@ export class EditPostUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    const updatedPost = await this.postsRepository.update({
-      ...post,
-      ...props,
-    })
+    if (authorId !== post.authorId.toString()) {
+      return left(new NotAllowedError())
+    }
 
-    return right({ updatedPost })
+    post.title = title
+    post.content = content
+    post.status = status
+    // TODO: PERGUNTAR PRO GALLOTTE SE VAI PODER TROCAR A PESSOA QUE VOCÊ CRIOU O POST JUNTO
+    // post.collabId = collabId
+
+    await this.postsRepository.save(post)
+
+    return right({ post })
   }
 }

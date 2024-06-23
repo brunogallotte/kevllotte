@@ -1,78 +1,67 @@
-import { makeRegister } from 'test/factories/makeRegister'
+import { makePost } from 'test/factories/make-post'
 import { InMemoryPostsRepository } from 'test/repositories/in-memory-posts-repository'
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
+import { POST_STATUS } from '../../enterprise/entities/post'
 import { EditPostUseCase } from './edit-post'
 
-let inMemoryUsersRepository: InMemoryUsersRepository
 let inMemoryPostsRepository: InMemoryPostsRepository
 let sut: EditPostUseCase
 
 describe('Edit Post', () => {
   beforeEach(() => {
-    inMemoryUsersRepository = new InMemoryUsersRepository()
     inMemoryPostsRepository = new InMemoryPostsRepository()
+
     sut = new EditPostUseCase(inMemoryPostsRepository)
   })
 
-  it('should be able to edit a post title', async () => {
-    const user = makeRegister()
+  it('should be able to edit a post', async () => {
+    const newPost = makePost(
+      {
+        authorId: new UniqueEntityID('author-1'),
+      },
+      new UniqueEntityID('post-1'),
+    )
 
-    await inMemoryUsersRepository.create(user)
-
-    const createdPost = await inMemoryPostsRepository.create({
-      title: 'Test Post Title',
-      content: 'Test Post Content',
-      userId: user.id,
-    })
+    await inMemoryPostsRepository.create(newPost)
 
     const result = await sut.execute({
-      postId: createdPost.id,
-      title: 'Test Post Title Edited',
+      postId: newPost.id.toString(),
+      authorId: 'author-1',
+      title: 'Post test title',
+      content: 'Test content',
+      status: POST_STATUS.PUBLISHED,
     })
 
     expect(result.isRight()).toBe(true)
-
-    if (result.isRight()) {
-      expect(result.value.updatedPost.title).toEqual('Test Post Title Edited')
-      expect(result.value.updatedPost.userId).toEqual(user.id)
-    }
+    expect(inMemoryPostsRepository.items[0]).toMatchObject({
+      title: 'Post test title',
+      content: 'Test content',
+      status: POST_STATUS.PUBLISHED,
+    })
   })
 
-  it('should be able to edit a post content', async () => {
-    const user = makeRegister()
+  it('should not be able to edit a post from another user', async () => {
+    const newPost = makePost(
+      {
+        authorId: new UniqueEntityID('author-1'),
+      },
+      new UniqueEntityID('post-1'),
+    )
 
-    await inMemoryUsersRepository.create(user)
-
-    const createdPost = await inMemoryPostsRepository.create({
-      title: 'Test Post Title',
-      content: 'Test Post Content',
-      userId: user.id,
-    })
+    await inMemoryPostsRepository.create(newPost)
 
     const result = await sut.execute({
-      postId: createdPost.id,
-      content: 'Test Post Content Edited',
-    })
-
-    expect(result.isRight()).toBe(true)
-
-    if (result.isRight()) {
-      expect(result.value.updatedPost.content).toEqual(
-        'Test Post Content Edited',
-      )
-      expect(result.value.updatedPost.userId).toEqual(user.id)
-    }
-  })
-
-  it('should not be able to edit a post with an non existing post id', async () => {
-    const result = await sut.execute({
-      postId: 'non-existing-id',
+      postId: newPost.id.toString(),
+      authorId: 'author-2',
+      title: 'Post test title',
+      content: 'Test content',
+      status: POST_STATUS.PUBLISHED,
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

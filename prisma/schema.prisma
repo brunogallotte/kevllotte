@@ -52,6 +52,7 @@ model Post {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   status      PostStatus    @default(DRAFT)
+  slug        String
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SavedPost   SavedPost[]
   LikedPost   LikedPost[]
