@@ -11,7 +11,6 @@ type EditPostUseCaseRequest = {
   title: string
   content: string
   status: POST_STATUS
-  collabId?: string
 }
 
 type EditPostUseCaseResponse = Either<
@@ -30,7 +29,6 @@ export class EditPostUseCase {
     title,
     content,
     status,
-    // collabId,
   }: EditPostUseCaseRequest): Promise<EditPostUseCaseResponse> {
     const post = await this.postsRepository.findById(postId)
 
@@ -45,8 +43,6 @@ export class EditPostUseCase {
     post.title = title
     post.content = content
     post.status = status
-    // TODO: PERGUNTAR PRO GALLOTTE SE VAI PODER TROCAR A PESSOA QUE VOCÊ CRIOU O POST JUNTO
-    // post.collabId = collabId
 
     await this.postsRepository.save(post)
 
