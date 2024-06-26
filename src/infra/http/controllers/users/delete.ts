@@ -12,8 +12,15 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
     userId,
   })
 
-  if (result.value instanceof ResourceNotFoundError) {
-    return reply.status(400).send()
+  if (result.isLeft()) {
+    const error = result.value
+
+    switch (error.constructor) {
+      case ResourceNotFoundError:
+        return reply.status(404).send(error.message)
+      default:
+        return reply.status(400).send(error.message)
+    }
   }
 
   return reply.status(200).send()

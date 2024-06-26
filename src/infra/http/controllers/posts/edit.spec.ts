@@ -16,7 +16,7 @@ describe('Edit Post (e2e)', () => {
   })
 
   it('should be able to edit a post', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { accessToken } = await createAndAuthenticateUser(app)
 
     const user = await prisma.user.findFirstOrThrow()
 
@@ -31,7 +31,7 @@ describe('Edit Post (e2e)', () => {
 
     const response = await request(app.server)
       .post('/posts/edit')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
         postId: post.id,
         title: 'Edited post',

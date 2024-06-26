@@ -14,11 +14,11 @@ describe('Create Post (e2e)', () => {
   })
 
   it('should be able to create a post', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { accessToken } = await createAndAuthenticateUser(app)
 
     const response = await request(app.server)
       .post('/posts')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
         title: 'Test post',
         content: 'Test post content',

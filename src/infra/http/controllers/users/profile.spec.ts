@@ -14,15 +14,15 @@ describe('Get User Profile (e2e)', () => {
   })
 
   it('should be able to get user profile', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { accessToken } = await createAndAuthenticateUser(app)
 
     const profileResponse = await request(app.server)
       .get('/me')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(profileResponse.statusCode).toEqual(200)
-    expect(profileResponse.body.user).toEqual(
+    expect(profileResponse.body.author).toEqual(
       expect.objectContaining({
         email: 'johndoe@example.com',
       }),

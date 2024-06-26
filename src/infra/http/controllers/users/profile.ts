@@ -1,22 +1,31 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { makeGetUserProfileUseCase } from '@/infra/database/prisma/factories/make-get-user-profile-use-case'
+import { makeGetAuthorProfileUseCase } from '@/infra/database/prisma/factories/make-get-author-profile-use-case'
+
+import { AuthorPresenter } from '../../presenters/author-presenter'
 
 export async function profile(request: FastifyRequest, reply: FastifyReply) {
-  const userId = await request.getCurrentUserId()
+  const authorId = await request.getCurrentUserId()
 
-  const getUserProfile = makeGetUserProfileUseCase()
+  const getAuthorProfile = makeGetAuthorProfileUseCase()
 
-  const result = await getUserProfile.execute({
-    userId,
+  const result = await getAuthorProfile.execute({
+    authorId,
   })
 
-  if (result.value instanceof ResourceNotFoundError) {
-    return reply.status(400).send()
+  if (result.isLeft()) {
+    const error = result.value
+
+    switch (error.constructor) {
+      case ResourceNotFoundError:
+        return reply.status(404).send(error.message)
+      default:
+        return reply.status(400).send(error.message)
+    }
   }
 
   return reply.status(200).send({
-    user: result.value.user,
+    author: AuthorPresenter.toHTTP(result.value.author),
   })
 }

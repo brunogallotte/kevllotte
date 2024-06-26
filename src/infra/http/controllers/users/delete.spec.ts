@@ -14,11 +14,11 @@ describe('Delete User (e2e)', () => {
   })
 
   it('should be able to delete a user', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { accessToken } = await createAndAuthenticateUser(app)
 
     const profileResponse = await request(app.server)
       .post('/users/delete')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(profileResponse.statusCode).toEqual(200)

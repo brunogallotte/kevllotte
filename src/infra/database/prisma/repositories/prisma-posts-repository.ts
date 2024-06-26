@@ -43,15 +43,10 @@ export class PrismaPostsRepository implements PostsRepository {
   }
 
   async create(post: Post) {
+    const data = PrismaPostMapper.toPrisma(post)
+
     await prisma.post.create({
-      data: {
-        userId: post.authorId.toString(),
-        content: post.content,
-        title: post.title,
-        status: POST_STATUS[post.status] as PostStatus,
-        collabId: post.collabId?.toString() ?? null,
-        slug: post.slug.value,
-      },
+      data,
     })
   }
 

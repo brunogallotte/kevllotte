@@ -8,7 +8,10 @@ import { deleteUser } from './delete'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
-import { authenticateBodySchema, registerBodySchema } from './schemas'
+import {
+  authenticateAuthorBodySchema,
+  registerAuthorBodySchema,
+} from './schemas'
 
 export async function userRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -17,7 +20,7 @@ export async function userRoutes(app: FastifyInstance) {
       schema: {
         tags: ['Authentication'],
         summary: 'Register a new user',
-        body: registerBodySchema,
+        body: registerAuthorBodySchema,
         response: {
           201: z.null(),
         },
@@ -33,10 +36,10 @@ export async function userRoutes(app: FastifyInstance) {
         tags: ['Authentication'],
         summary: 'Authenticate a user',
         security: [{ bearerAuth: [] }],
-        body: authenticateBodySchema,
+        body: authenticateAuthorBodySchema,
         response: {
           200: z.object({
-            token: z.string(),
+            accessToken: z.string(),
           }),
         },
       },
@@ -74,20 +77,20 @@ export async function userRoutes(app: FastifyInstance) {
           security: [{ bearerAuth: [] }],
           response: {
             200: z.object({
-              user: z.object({
+              author: z.object({
                 id: z.string().uuid(),
                 name: z.string(),
                 email: z.string().email(),
                 bio: z.string().nullish(),
                 avatarUrl: z.string().nullish(),
-                linkedinUrl: z.string().nullish(),
-                githubUrl: z.string().nullish(),
-                instagramUrl: z.string().nullish(),
-                twitterUrl: z.string().nullish(),
-                websiteUrl: z.string().nullish(),
-                password: z.string(),
+                // linkedinUrl: z.string().nullish(),
+                // githubUrl: z.string().nullish(),
+                // instagramUrl: z.string().nullish(),
+                // twitterUrl: z.string().nullish(),
+                // websiteUrl: z.string().nullish(),
+                // password: z.string(),
                 createdAt: z.date(),
-                updatedAt: z.date(),
+                updatedAt: z.date().optional(),
               }),
             }),
             400: z.object({

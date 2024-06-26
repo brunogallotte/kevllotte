@@ -1,4 +1,4 @@
-import type { Post as PrismaPost } from '@prisma/client'
+import type { Post as PrismaPost, PostStatus, Prisma } from '@prisma/client'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Post, POST_STATUS } from '@/domain/blog/enterprise/entities/post'
@@ -19,5 +19,19 @@ export class PrismaPostMapper {
       },
       new UniqueEntityID(raw.id),
     )
+  }
+
+  static toPrisma(post: Post): Prisma.PostUncheckedCreateInput {
+    return {
+      id: post.id.toString(),
+      title: post.title,
+      content: post.content,
+      userId: post.authorId.toString(),
+      status: POST_STATUS[post.status] as PostStatus,
+      collabId: post.collabId?.toString() ?? undefined,
+      slug: post.slug.value,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt ?? undefined,
+    }
   }
 }

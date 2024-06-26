@@ -18,9 +18,9 @@ export async function createAndAuthenticateUser(app: FastifyInstance) {
     password: '12345678',
   })
 
-  const { token } = authResponse.body
+  const { accessToken } = authResponse.body
 
   return {
-    token,
+    accessToken,
   }
 }

@@ -1,49 +1,39 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { makeAuthenticateUseCase } from '@/infra/database/prisma/factories/make-authenticate-use-case'
+import { WrongCredentialsError } from '@/domain/blog/application/use-cases/errors/wrong-credentials-error'
+import { makeAuthenticateAuthorUseCase } from '@/infra/database/prisma/factories/make-authenticate-author-use-case'
 
 export async function authenticate(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const authenticateBodySchema = z.object({
+  const authenticateAuthorBodySchema = z.object({
     password: z.string().min(8),
     email: z.string().email(),
   })
 
-  const { password, email } = authenticateBodySchema.parse(request.body)
+  const { password, email } = authenticateAuthorBodySchema.parse(request.body)
 
-  const authenticateUseCase = makeAuthenticateUseCase()
+  const authenticateAuthorUseCase = makeAuthenticateAuthorUseCase(reply)
 
-  const authenticateUser = await authenticateUseCase.execute({
+  const result = await authenticateAuthorUseCase.execute({
     password,
     email,
   })
 
-  if (authenticateUser.value instanceof ResourceNotFoundError) {
-    return reply.status(404).send()
+  if (result.isLeft()) {
+    const error = result.value
+
+    switch (error.constructor) {
+      case WrongCredentialsError:
+        return reply.status(401).send(error.message)
+      default:
+        return reply.status(400).send(error.message)
+    }
   }
 
-  const token = await reply.jwtSign(
-    {},
-    {
-      sign: {
-        sub: authenticateUser.value.user.id,
-      },
-    },
-  )
-
-  const refreshToken = await reply.jwtSign(
-    {},
-    {
-      sign: {
-        sub: authenticateUser.value.user.id,
-        expiresIn: '7d',
-      },
-    },
-  )
+  const { accessToken, refreshToken } = result.value
 
   return reply
     .setCookie('refreshToken', refreshToken, {
@@ -54,6 +44,6 @@ export async function authenticate(
     })
     .status(200)
     .send({
-      token,
+      accessToken,
     })
 }
