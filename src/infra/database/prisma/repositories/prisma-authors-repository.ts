@@ -41,6 +41,19 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     })
   }
 
+  async update(author: Author) {
+    const data = PrismaAuthorMapper.toPrisma(author)
+
+    const updatedAuthor = await prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+
+    return PrismaAuthorMapper.toDomain(updatedAuthor)
+  }
+
   async delete(author: Author) {
     const data = PrismaAuthorMapper.toPrisma(author)
 

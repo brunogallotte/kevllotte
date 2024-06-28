@@ -25,6 +25,16 @@ export class InMemoryAuthorsRepository implements AuthorsRepository {
     return author
   }
 
+  async update(author: Author) {
+    const itemIndex = this.items.findIndex((item) => item.id === author.id)
+
+    this.items[itemIndex] = author
+
+    DomainEvents.dispatchEventsForAggregate(author.id)
+
+    return author
+  }
+
   async create(author: Author) {
     this.items.push(author)
 
