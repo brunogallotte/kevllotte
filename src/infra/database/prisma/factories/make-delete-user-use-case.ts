@@ -1,10 +1,11 @@
-import { DeleteUserUseCase } from '../../../../domain/blog/application/use-cases/delete-user'
-import { PrismaUsersRepository } from '../repositories/prisma-users-repository'
+import { DeleteAuthorUseCase } from '@/domain/blog/application/use-cases/delete-author'
 
-export function makeDeleteUserUseCase() {
-  const usersRepository = new PrismaUsersRepository()
+import { PrismaAuthorsRepository } from '../repositories/prisma-authors-repository'
 
-  const deleteUserUseCase = new DeleteUserUseCase(usersRepository)
+export function makeDeleteAuthorUseCase() {
+  const authorsRepository = new PrismaAuthorsRepository()
 
-  return deleteUserUseCase
+  const deleteAuthorUseCase = new DeleteAuthorUseCase(authorsRepository)
+
+  return deleteAuthorUseCase
 }

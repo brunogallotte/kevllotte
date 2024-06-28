@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { auth } from '../../middlewares/auth'
 import { authenticate } from './authenticate'
 import { deleteUser } from './delete'
+import { edit } from './edit'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
@@ -121,5 +122,41 @@ export async function userRoutes(app: FastifyInstance) {
         },
       },
       deleteUser,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/users/edit',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Edit user',
+          security: [{ bearerAuth: [] }],
+          response: {
+            200: z.object({
+              author: z.object({
+                id: z.string().uuid(),
+                name: z.string(),
+                email: z.string(),
+                bio: z.string().optional(),
+                linkedinUrl: z.string().optional(),
+                githubUrl: z.string().optional(),
+                instagramUrl: z.string().optional(),
+                twitterUrl: z.string().optional(),
+                websiteUrl: z.string().optional(),
+                avatarUrl: z.string().optional(),
+                createdAt: z.date(),
+                updatedAt: z.date().optional(),
+              }),
+            }),
+            400: z.object({
+              message: z.string(),
+            }),
+          },
+        },
+      },
+      edit,
     )
 }

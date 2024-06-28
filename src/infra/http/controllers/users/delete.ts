@@ -1,15 +1,15 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { makeDeleteUserUseCase } from '@/infra/database/prisma/factories/make-delete-user-use-case'
+import { makeDeleteAuthorUseCase } from '@/infra/database/prisma/factories/make-delete-user-use-case'
 
 export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
-  const userId = await request.getCurrentUserId()
+  const authorId = await request.getCurrentUserId()
 
-  const deleteUser = makeDeleteUserUseCase()
+  const deleteAuthorUseCase = makeDeleteAuthorUseCase()
 
-  const result = await deleteUser.execute({
-    userId,
+  const result = await deleteAuthorUseCase.execute({
+    authorId,
   })
 
   if (result.isLeft()) {

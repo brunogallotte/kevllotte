@@ -7,6 +7,11 @@ export class AuthorPresenter {
       name: author.name,
       email: author.email,
       bio: author.bio,
+      linkedinUrl: author.linkedinUrl,
+      githubUrl: author.githubUrl,
+      instagramUrl: author.instagramUrl,
+      twitterUrl: author.twitterUrl,
+      websiteUrl: author.websiteUrl,
       avatarUrl: author.avatarUrl,
       createdAt: author.createdAt,
       updatedAt: author.updatedAt,
@@ -14,10 +19,4 @@ export class AuthorPresenter {
   }
 }
 
-// Criar um presenter para pegar os links do perfil do usuário
-
-// linkedinUrl: author.linkedinUrl,
-// githubUrl: author.githubUrl,
-// instagramUrl: author.instagramUrl,
-// twitterUrl: author.twitterUrl,
-// websiteUrl: author.websiteUrl,
+// Talvez criar um presenter para pegar os links do perfil do usuário
