@@ -28,3 +28,7 @@ export const editAuthorProfileBodySchema = z.object({
   twitterUrl: z.string().optional(),
   websiteUrl: z.string().optional(),
 })
+
+export const fetchAuthorPostsQuerySchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+})

@@ -5,6 +5,8 @@ import {
   Author,
   type AuthorProps,
 } from '@/domain/blog/enterprise/entities/author'
+import { PrismaAuthorMapper } from '@/infra/database/prisma/mappers/prisma-author-mapper'
+import { prisma } from '@/lib/prisma'
 
 export function makeAuthor(
   override: Partial<AuthorProps> = {},
@@ -28,4 +30,16 @@ export function makeAuthor(
   )
 
   return author
+}
+
+export class AuthorFactory {
+  async makePrismaAuthor(data: Partial<AuthorProps> = {}): Promise<Author> {
+    const author = makeAuthor(data)
+
+    await prisma.user.create({
+      data: PrismaAuthorMapper.toPrisma(author),
+    })
+
+    return author
+  }
 }

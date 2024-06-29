@@ -13,7 +13,7 @@ describe('Edit Author (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to edit an author profile', async () => {
+  it('should be able to edit a user profile', async () => {
     const { accessToken } = await createAndAuthenticateUser(app)
 
     const response = await request(app.server)

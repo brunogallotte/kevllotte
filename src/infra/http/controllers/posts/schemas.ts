@@ -13,3 +13,7 @@ export const editPostBodySchema = z.object({
   content: z.string(),
   status: z.enum(['PUBLISHED', 'DRAFT']),
 })
+
+export const deletePostBodySchema = z.object({
+  postId: z.string().uuid(),
+})

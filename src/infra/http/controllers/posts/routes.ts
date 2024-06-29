@@ -3,8 +3,13 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { auth } from '../../middlewares/auth'
 import { create } from './create'
+import { deletePost } from './delete'
 import { edit } from './edit'
-import { createPostBodySchema, editPostBodySchema } from './schemas'
+import {
+  createPostBodySchema,
+  deletePostBodySchema,
+  editPostBodySchema,
+} from './schemas'
 
 export async function postRoutes(app: FastifyInstance) {
   app
@@ -37,5 +42,21 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       edit,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/delete',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Delete a post',
+          security: [{ bearerAuth: [] }],
+          body: deletePostBodySchema,
+        },
+      },
+      deletePost,
     )
 }

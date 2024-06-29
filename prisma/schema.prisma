@@ -26,7 +26,7 @@ model User {
   following    Follower[]     @relation("following")
   SavedPost    SavedPost[]
   LikedPost    LikedPost[]
-  CommentPost  CommentPost[]
+  PostComment  PostComment[]
   Notification Notification[]
 
   @@map("users")
@@ -56,7 +56,7 @@ model Post {
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SavedPost   SavedPost[]
   LikedPost   LikedPost[]
-  CommentPost CommentPost[]
+  PostComment PostComment[]
   TagPost     TagPost[]
 
   @@map("posts")
@@ -84,7 +84,7 @@ model LikedPost {
   @@map("liked_posts")
 }
 
-model CommentPost {
+model PostComment {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
   postId    String   @map("post_id")
@@ -94,7 +94,7 @@ model CommentPost {
   User      User     @relation(fields: [userId], references: [id])
   Post      Post     @relation(fields: [postId], references: [id])
 
-  @@map("comment_posts")
+  @@map("posts_comment")
 }
 
 model TagPost {

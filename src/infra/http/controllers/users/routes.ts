@@ -6,6 +6,7 @@ import { auth } from '../../middlewares/auth'
 import { authenticate } from './authenticate'
 import { deleteUser } from './delete'
 import { edit } from './edit'
+import { fetchPosts } from './fetch-author-posts'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
@@ -158,5 +159,20 @@ export async function userRoutes(app: FastifyInstance) {
         },
       },
       edit,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/users/posts',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Fetch user posts',
+          security: [{ bearerAuth: [] }],
+        },
+      },
+      fetchPosts,
     )
 }

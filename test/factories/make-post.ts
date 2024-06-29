@@ -6,6 +6,8 @@ import {
   POST_STATUS,
   type PostProps,
 } from '@/domain/blog/enterprise/entities/post'
+import { PrismaPostMapper } from '@/infra/database/prisma/mappers/prisma-post-mapper'
+import { prisma } from '@/lib/prisma'
 
 export function makePost(
   override: Partial<PostProps> = {},
@@ -23,4 +25,16 @@ export function makePost(
   )
 
   return post
+}
+
+export class PostFactory {
+  async makePrismaPost(data: Partial<PostProps> = {}): Promise<Post> {
+    const post = makePost(data)
+
+    await prisma.post.create({
+      data: PrismaPostMapper.toPrisma(post),
+    })
+
+    return post
+  }
 }
