@@ -16,7 +16,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
 
   const editPostUseCase = makeEditPostUseCase()
 
-  const editedPost = await editPostUseCase.execute({
+  const result = await editPostUseCase.execute({
     authorId: userId,
     postId,
     title,
@@ -24,13 +24,18 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
     status: POST_STATUS[status],
   })
 
-  if (editedPost.value instanceof ResourceNotFoundError) {
-    return reply.status(400).send()
+  if (result.isLeft()) {
+    const error = result.value
+
+    switch (error.constructor) {
+      case ResourceNotFoundError:
+        return reply.status(404).send(error.message)
+      case NotAllowedError:
+        return reply.status(401).send(error.message)
+      default:
+        return reply.status(400).send(error.message)
+    }
   }
 
-  if (editedPost.value instanceof NotAllowedError) {
-    return reply.status(401).send()
-  }
-
-  return reply.status(200).send({ post: editedPost.value.post })
+  return reply.status(200).send({ post: result.value.post })
 }
