@@ -25,3 +25,11 @@ export const commentOnPostBodySchema = z.object({
 export const commentOnPostParamsSchema = z.object({
   postId: z.string().uuid(),
 })
+
+export const fetchPostCommentsParamsSchema = z.object({
+  postId: z.string().uuid(),
+})
+
+export const fetchPostCommentsQuerySchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+})
