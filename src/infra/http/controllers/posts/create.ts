@@ -22,5 +22,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     status: POST_STATUS[status],
   })
 
+  if (result.isLeft()) {
+    return reply.status(400).send()
+  }
+
   return reply.status(201).send({ post: result.value?.post })
 }

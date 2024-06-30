@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Get User Profile (e2e)', () => {
+describe('Get Author Profile (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,7 +13,7 @@ describe('Get User Profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get user profile', async () => {
+  it('should be able to get author profile', async () => {
     const { accessToken } = await createAndAuthenticateUser(app)
 
     const profileResponse = await request(app.server)

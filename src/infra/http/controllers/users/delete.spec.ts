@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Delete User (e2e)', () => {
+describe('Delete Author (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,7 +13,7 @@ describe('Delete User (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to delete a user', async () => {
+  it('should be able to delete an author', async () => {
     const { accessToken } = await createAndAuthenticateUser(app)
 
     const profileResponse = await request(app.server)

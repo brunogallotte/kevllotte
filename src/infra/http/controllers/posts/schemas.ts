@@ -17,3 +17,11 @@ export const editPostBodySchema = z.object({
 export const deletePostBodySchema = z.object({
   postId: z.string().uuid(),
 })
+
+export const commentOnPostBodySchema = z.object({
+  content: z.string(),
+})
+
+export const commentOnPostParamsSchema = z.object({
+  postId: z.string().uuid(),
+})

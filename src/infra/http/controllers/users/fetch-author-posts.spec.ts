@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Check-in History (e2e)', () => {
+describe('Fetch Author Posts (e2e)', () => {
   let authorFactory: AuthorFactory
   let postFactory: PostFactory
 
@@ -20,7 +20,7 @@ describe('Check-in History (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to fetch user posts', async () => {
+  it('should be able to fetch author posts', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
     const accessToken = app.jwt.sign({ sub: user.id.toString() })

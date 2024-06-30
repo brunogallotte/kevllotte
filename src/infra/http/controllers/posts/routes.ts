@@ -2,10 +2,13 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { auth } from '../../middlewares/auth'
+import { comment } from './comment'
 import { create } from './create'
 import { deletePost } from './delete'
 import { edit } from './edit'
 import {
+  commentOnPostBodySchema,
+  commentOnPostParamsSchema,
   createPostBodySchema,
   deletePostBodySchema,
   editPostBodySchema,
@@ -58,5 +61,22 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       deletePost,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/comments',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Comment in a post',
+          security: [{ bearerAuth: [] }],
+          body: commentOnPostBodySchema,
+          params: commentOnPostParamsSchema,
+        },
+      },
+      comment,
     )
 }
