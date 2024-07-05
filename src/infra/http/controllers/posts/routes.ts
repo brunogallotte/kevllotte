@@ -7,6 +7,7 @@ import { create } from './create'
 import { deletePost } from './delete'
 import { edit } from './edit'
 import { fetchPostComments } from './fetch-post-comments'
+import { replyToComment } from './reply-to-comment'
 import {
   commentOnPostBodySchema,
   commentOnPostParamsSchema,
@@ -14,6 +15,8 @@ import {
   deletePostBodySchema,
   editPostBodySchema,
   fetchPostCommentsParamsSchema,
+  replyToCommentBodySchema,
+  replyToCommentParamsSchema,
 } from './schemas'
 
 export async function postRoutes(app: FastifyInstance) {
@@ -96,5 +99,22 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       fetchPostComments,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/comments/:replyToId',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Reply a post comment',
+          security: [{ bearerAuth: [] }],
+          body: replyToCommentBodySchema,
+          params: replyToCommentParamsSchema,
+        },
+      },
+      replyToComment,
     )
 }
