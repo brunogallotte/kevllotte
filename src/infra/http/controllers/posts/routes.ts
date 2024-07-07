@@ -7,6 +7,8 @@ import { create } from './create'
 import { deletePost } from './delete'
 import { edit } from './edit'
 import { fetchPostComments } from './fetch-post-comments'
+import { like } from './like'
+import { likeComment } from './like-comment'
 import { replyToComment } from './reply-to-comment'
 import {
   commentOnPostBodySchema,
@@ -15,6 +17,8 @@ import {
   deletePostBodySchema,
   editPostBodySchema,
   fetchPostCommentsParamsSchema,
+  likeCommentParamsSchema,
+  likePostParamsSchema,
   replyToCommentBodySchema,
   replyToCommentParamsSchema,
 } from './schemas'
@@ -116,5 +120,37 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       replyToComment,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/like',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Like a post',
+          security: [{ bearerAuth: [] }],
+          params: likePostParamsSchema,
+        },
+      },
+      like,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/comments/:commentId/like',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Like a comment',
+          security: [{ bearerAuth: [] }],
+          params: likeCommentParamsSchema,
+        },
+      },
+      likeComment,
     )
 }

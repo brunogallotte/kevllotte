@@ -39,6 +39,14 @@ export const replyToCommentBodySchema = z.object({
 })
 
 export const replyToCommentParamsSchema = z.object({
-  postId: z.string(),
+  postId: z.string().uuid(),
   replyToId: z.string().uuid(),
+})
+
+export const likePostParamsSchema = z.object({
+  postId: z.string().uuid(),
+})
+
+export const likeCommentParamsSchema = z.object({
+  commentId: z.string().uuid(),
 })

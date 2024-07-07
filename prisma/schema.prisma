@@ -25,9 +25,10 @@ model User {
   followers    Follower[]     @relation("followers")
   following    Follower[]     @relation("following")
   SavedPost    SavedPost[]
-  LikedPost    LikedPost[]
+  LikedPost    PostLike[]
   PostComment  PostComment[]
   Notification Notification[]
+  CommentLike  CommentLike[]
 
   @@map("users")
 }
@@ -55,7 +56,7 @@ model Post {
   slug        String
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SavedPost   SavedPost[]
-  LikedPost   LikedPost[]
+  Likes       PostLike[]
   PostComment PostComment[]
   TagPost     TagPost[]
 
@@ -73,15 +74,28 @@ model SavedPost {
   @@map("saved_posts")
 }
 
-model LikedPost {
+model PostLike {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
   postId    String   @map("post_id")
   createdAt DateTime @default(now()) @map("created_at")
-  User      User     @relation(fields: [userId], references: [id])
-  Post      Post     @relation(fields: [postId], references: [id])
 
-  @@map("liked_posts")
+  User User @relation(fields: [userId], references: [id])
+  Post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("posts_like")
+}
+
+model CommentLike {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  commentId String   @map("comment_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  User    User        @relation(fields: [userId], references: [id])
+  Comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@map("comments_like")
 }
 
 model PostComment {
@@ -96,8 +110,9 @@ model PostComment {
   replyTo   PostComment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies   PostComment[] @relation("ReplyTo")
 
-  User User @relation(fields: [userId], references: [id])
-  Post Post @relation(fields: [postId], references: [id])
+  User  User          @relation(fields: [userId], references: [id])
+  Post  Post          @relation(fields: [postId], references: [id])
+  Likes CommentLike[]
 
   @@map("posts_comment")
 }
