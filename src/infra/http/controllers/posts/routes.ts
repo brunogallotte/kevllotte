@@ -9,6 +9,8 @@ import { edit } from './edit'
 import { fetchPostComments } from './fetch-post-comments'
 import { like } from './like'
 import { likeComment } from './like-comment'
+import { removeCommentLike } from './remove-comment-like'
+import { removePostLike } from './remove-post-like'
 import { replyToComment } from './reply-to-comment'
 import {
   commentOnPostBodySchema,
@@ -19,6 +21,8 @@ import {
   fetchPostCommentsParamsSchema,
   likeCommentParamsSchema,
   likePostParamsSchema,
+  removeCommentLikeParamsSchema,
+  removePostLikeParamsSchema,
   replyToCommentBodySchema,
   replyToCommentParamsSchema,
 } from './schemas'
@@ -126,7 +130,7 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/posts/:postId/like',
+      '/posts/:postId/likes',
       {
         schema: {
           tags: ['Posts'],
@@ -142,7 +146,23 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/posts/:postId/comments/:commentId/like',
+      '/posts/:postId/likes/:likeId',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Remove a post like',
+          security: [{ bearerAuth: [] }],
+          params: removePostLikeParamsSchema,
+        },
+      },
+      removePostLike,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/comments/:commentId/likes',
       {
         schema: {
           tags: ['Posts'],
@@ -152,5 +172,21 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       likeComment,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/comments/:commentId/likes/:likeId',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Remove a comment like',
+          security: [{ bearerAuth: [] }],
+          params: removeCommentLikeParamsSchema,
+        },
+      },
+      removeCommentLike,
     )
 }

@@ -1,22 +1,23 @@
 import request from 'supertest'
 import { AuthorFactory } from 'test/factories/make-author'
+import { CommentLikeFactory } from 'test/factories/make-comment-like'
 import { PostFactory } from 'test/factories/make-post'
 import { PostCommentFactory } from 'test/factories/make-post-comment'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { prisma } from '@/lib/prisma'
-
 import { app } from '../../app'
 
-describe('Like Comment (e2e)', () => {
+describe('Remove Comment Like (e2e)', () => {
   let authorFactory: AuthorFactory
   let postFactory: PostFactory
   let postCommentFactory: PostCommentFactory
+  let commentLikeFactory: CommentLikeFactory
 
   beforeAll(async () => {
     authorFactory = new AuthorFactory()
     postFactory = new PostFactory()
     postCommentFactory = new PostCommentFactory()
+    commentLikeFactory = new CommentLikeFactory()
 
     await app.ready()
   })
@@ -25,7 +26,7 @@ describe('Like Comment (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to like a comment', async () => {
+  it('should be able to remove a comment like', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
     const accessToken = app.jwt.sign({ sub: user.id.toString() })
@@ -34,27 +35,27 @@ describe('Like Comment (e2e)', () => {
       authorId: user.id,
     })
 
+    const postId = post.id.toString()
+
     const comment = await postCommentFactory.makePrismaPostComment({
-      postId: post.id,
       authorId: user.id,
+      postId: post.id,
     })
 
-    const postId = post.id.toString()
     const commentId = comment.id.toString()
 
+    const like = await commentLikeFactory.makePrismaCommentLike({
+      authorId: user.id,
+      commentId: comment.id,
+    })
+
+    const likeId = like.id.toString()
+
     const response = await request(app.server)
-      .post(`/posts/${postId}/comments/${commentId}/likes`)
+      .post(`/posts/${postId}/comments/${commentId}/likes/${likeId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    expect(response.statusCode).toEqual(201)
-
-    const commentLikeOnDatabase = await prisma.commentLike.findFirst({
-      where: {
-        commentId,
-      },
-    })
-
-    expect(commentLikeOnDatabase).toBeTruthy()
+    expect(response.statusCode).toEqual(200)
   })
 })

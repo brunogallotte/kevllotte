@@ -47,6 +47,16 @@ export const likePostParamsSchema = z.object({
   postId: z.string().uuid(),
 })
 
+export const removePostLikeParamsSchema = z.object({
+  postId: z.string().uuid(),
+  likeId: z.string().uuid(),
+})
+
 export const likeCommentParamsSchema = z.object({
   commentId: z.string().uuid(),
+})
+
+export const removeCommentLikeParamsSchema = z.object({
+  commentId: z.string().uuid(),
+  likeId: z.string().uuid(),
 })
