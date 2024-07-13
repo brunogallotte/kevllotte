@@ -12,10 +12,13 @@ export const createPostBodySchema = z.object({
 })
 
 export const editPostBodySchema = z.object({
-  postId: z.string().uuid(),
   title: z.string(),
   content: z.string(),
   status: z.enum(['PUBLISHED', 'DRAFT']),
+})
+
+export const editPostParamsSchema = z.object({
+  postId: z.string().uuid(),
 })
 
 export const deletePostBodySchema = z.object({

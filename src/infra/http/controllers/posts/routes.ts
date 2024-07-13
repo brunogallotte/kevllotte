@@ -19,6 +19,7 @@ import {
   createPostBodySchema,
   deletePostBodySchema,
   editPostBodySchema,
+  editPostParamsSchema,
   fetchPostCommentsParamsSchema,
   fetchPostTagsParamsSchema,
   likeCommentParamsSchema,
@@ -50,14 +51,15 @@ export async function postRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
-      '/posts/edit',
+    .put(
+      '/posts/:postId/edit',
       {
         schema: {
           tags: ['Posts'],
           summary: 'Edit a post',
           security: [{ bearerAuth: [] }],
           body: editPostBodySchema,
+          params: editPostParamsSchema,
         },
       },
       edit,
@@ -66,7 +68,7 @@ export async function postRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .delete(
       '/posts/delete',
       {
         schema: {
@@ -149,7 +151,7 @@ export async function postRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .delete(
       '/posts/:postId/likes/:likeId',
       {
         schema: {
@@ -181,7 +183,7 @@ export async function postRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .delete(
       '/posts/:postId/comments/:commentId/likes/:likeId',
       {
         schema: {

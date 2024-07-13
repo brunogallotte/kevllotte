@@ -17,7 +17,7 @@ describe('Delete Author (e2e)', () => {
     const { accessToken } = await createAndAuthenticateUser(app)
 
     const profileResponse = await request(app.server)
-      .post('/users/delete')
+      .delete('/users/delete')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

@@ -107,7 +107,7 @@ export async function userRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .delete(
       '/users/delete',
       {
         schema: {
@@ -128,7 +128,7 @@ export async function userRoutes(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .patch(
       '/users/edit',
       {
         schema: {

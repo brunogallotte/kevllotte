@@ -30,7 +30,7 @@ describe('Delete Post (e2e)', () => {
     })
 
     const deletePostResponse = await request(app.server)
-      .post('/posts/delete')
+      .delete('/posts/delete')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         postId: post.id,

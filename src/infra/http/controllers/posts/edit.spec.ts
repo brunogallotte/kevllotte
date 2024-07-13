@@ -29,11 +29,12 @@ describe('Edit Post (e2e)', () => {
       },
     })
 
+    const postId = post.id
+
     const response = await request(app.server)
-      .post('/posts/edit')
+      .put(`/posts/${postId}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        postId: post.id,
         title: 'Edited post',
         content: 'Edited post',
         status: 'PUBLISHED',

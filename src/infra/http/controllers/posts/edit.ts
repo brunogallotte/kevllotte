@@ -5,14 +5,14 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { POST_STATUS } from '@/domain/blog/enterprise/entities/post'
 import { makeEditPostUseCase } from '@/infra/database/prisma/factories/make-edit-post-use-case'
 
-import { editPostBodySchema } from './schemas'
+import { editPostBodySchema, editPostParamsSchema } from './schemas'
 
 export async function edit(request: FastifyRequest, reply: FastifyReply) {
   const userId = await request.getCurrentUserId()
 
-  const { postId, title, content, status } = editPostBodySchema.parse(
-    request.body,
-  )
+  const { title, content, status } = editPostBodySchema.parse(request.body)
+
+  const { postId } = editPostParamsSchema.parse(request.params)
 
   const editPostUseCase = makeEditPostUseCase()
 

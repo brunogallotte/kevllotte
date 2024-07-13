@@ -17,7 +17,7 @@ describe('Edit Author Profile (e2e)', () => {
     const { accessToken } = await createAndAuthenticateUser(app)
 
     const response = await request(app.server)
-      .post('/users/edit')
+      .patch('/users/edit')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         bio: 'Test bio',

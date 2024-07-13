@@ -52,7 +52,7 @@ describe('Remove Comment Like (e2e)', () => {
     const likeId = like.id.toString()
 
     const response = await request(app.server)
-      .post(`/posts/${postId}/comments/${commentId}/likes/${likeId}`)
+      .delete(`/posts/${postId}/comments/${commentId}/likes/${likeId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

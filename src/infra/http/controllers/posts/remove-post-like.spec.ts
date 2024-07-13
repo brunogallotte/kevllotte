@@ -42,7 +42,7 @@ describe('Remove Post Post (e2e)', () => {
     const likeId = like.id.toString()
 
     const response = await request(app.server)
-      .post(`/posts/${postId}/likes/${likeId}`)
+      .delete(`/posts/${postId}/likes/${likeId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
