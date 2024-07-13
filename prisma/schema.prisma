@@ -58,7 +58,7 @@ model Post {
   SavedPost   SavedPost[]
   Likes       PostLike[]
   PostComment PostComment[]
-  TagPost     TagPost[]
+  Tags        Tag[]
 
   @@map("posts")
 }
@@ -117,15 +117,15 @@ model PostComment {
   @@map("posts_comment")
 }
 
-model TagPost {
+model Tag {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  postId    String   @map("post_id")
-  Post      Post     @relation(fields: [postId], references: [id])
 
-  @@map("tag_posts")
+  Post   Post   @relation(fields: [postId], references: [id])
+  postId String @map("post_id")
+
+  @@map("tags")
 }
 
 model Notification {

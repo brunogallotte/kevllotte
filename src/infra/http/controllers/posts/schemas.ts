@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+export const paginationQuerySchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+})
+
 export const createPostBodySchema = z.object({
   title: z.string(),
   content: z.string(),
@@ -30,10 +34,6 @@ export const fetchPostCommentsParamsSchema = z.object({
   postId: z.string().uuid(),
 })
 
-export const fetchPostCommentsQuerySchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-})
-
 export const replyToCommentBodySchema = z.object({
   content: z.string(),
 })
@@ -59,4 +59,8 @@ export const likeCommentParamsSchema = z.object({
 export const removeCommentLikeParamsSchema = z.object({
   commentId: z.string().uuid(),
   likeId: z.string().uuid(),
+})
+
+export const fetchPostTagsParamsSchema = z.object({
+  postId: z.string().uuid(),
 })

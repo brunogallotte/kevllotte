@@ -39,8 +39,6 @@ describe('Remove Post Post (e2e)', () => {
       postId: post.id,
     })
 
-    console.log(like)
-
     const likeId = like.id.toString()
 
     const response = await request(app.server)

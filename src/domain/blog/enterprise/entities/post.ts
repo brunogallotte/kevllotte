@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { Entity } from '@/core/entities/entity'
+import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
@@ -22,7 +22,7 @@ export type PostProps = {
   updatedAt?: Date | null
 }
 
-export class Post extends Entity<PostProps> {
+export class Post extends AggregateRoot<PostProps> {
   get authorId() {
     return this.props.authorId
   }
