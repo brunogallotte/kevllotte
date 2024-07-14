@@ -58,7 +58,7 @@ model Post {
   SavedPost   SavedPost[]
   Likes       PostLike[]
   PostComment PostComment[]
-  Tags        Tag[]
+  PostTags    Tag[]
 
   @@map("posts")
 }

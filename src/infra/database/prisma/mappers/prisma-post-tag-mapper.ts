@@ -11,7 +11,6 @@ export class PrismaPostTagMapper {
         postId: new UniqueEntityID(raw.postId),
         createdAt: raw.createdAt,
       },
-
       new UniqueEntityID(raw.id),
     )
   }
