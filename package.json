@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
     "start:dev": "tsx watch src/infra/http/server.ts",
     "test": "vitest run",
