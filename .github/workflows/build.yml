@@ -33,8 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set DATABASE_URL environment variable
-        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-
       - name: Run all tests
         run: npm run test
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
