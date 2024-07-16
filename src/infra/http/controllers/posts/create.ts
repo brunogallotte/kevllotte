@@ -26,5 +26,5 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send()
   }
 
-  return reply.status(201).send({ post: result.value?.post })
+  return reply.status(201).send({ post: result.value.post })
 }
