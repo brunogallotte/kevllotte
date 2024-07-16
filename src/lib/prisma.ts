@@ -8,7 +8,11 @@ declare global {
 let prismaInstance: PrismaClient
 
 if (process.env.NODE_ENV === 'production') {
-  prismaInstance = new PrismaClient()
+  prismaInstance = new PrismaClient({
+    transactionOptions: {
+      timeout: 30000,
+    },
+  })
 } else {
   if (!global.cachedPrisma) {
     global.cachedPrisma = new PrismaClient()
