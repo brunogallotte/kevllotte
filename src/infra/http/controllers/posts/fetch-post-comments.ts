@@ -3,7 +3,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { makeFetchPostCommentsUseCase } from '@/infra/database/prisma/factories/make-fetch-post-comments'
 
 import { PostCommentPresenter } from '../../presenters/post-comment-presenter'
-import { fetchPostCommentsParamsSchema, paginationQuerySchema } from './schemas'
+import { paginationQuerySchema } from '../schemas'
+import { fetchPostCommentsParamsSchema } from './schemas'
 
 export async function fetchPostComments(
   request: FastifyRequest,

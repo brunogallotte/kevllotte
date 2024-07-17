@@ -8,6 +8,7 @@ export type PostsRepository = {
     authorId: string,
     params: PaginationParams,
   ): Promise<Post[]>
+  findMany(params: PaginationParams): Promise<Post[]>
   delete(post: Post): Promise<void>
   create(post: Post): Promise<void>
   save(post: Post): Promise<void>

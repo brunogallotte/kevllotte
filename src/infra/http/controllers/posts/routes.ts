@@ -2,12 +2,14 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { auth } from '../../middlewares/auth'
+import { paginationQuerySchema } from '../schemas'
 import { comment } from './comment'
 import { create } from './create'
 import { deletePost } from './delete'
 import { edit } from './edit'
 import { fetchPostComments } from './fetch-post-comments'
 import { fetchPostTags } from './fetch-post-tags'
+import { fetchPosts } from './fetch-posts'
 import { like } from './like'
 import { likeComment } from './like-comment'
 import { removeCommentLike } from './remove-comment-like'
@@ -24,7 +26,6 @@ import {
   fetchPostTagsParamsSchema,
   likeCommentParamsSchema,
   likePostParamsSchema,
-  paginationQuerySchema,
   removeCommentLikeParamsSchema,
   removePostLikeParamsSchema,
   replyToCommentBodySchema,
@@ -211,5 +212,21 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       fetchPostTags,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/posts',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Fetch posts',
+          security: [{ bearerAuth: [] }],
+          querystring: paginationQuerySchema,
+        },
+      },
+      fetchPosts,
     )
 }

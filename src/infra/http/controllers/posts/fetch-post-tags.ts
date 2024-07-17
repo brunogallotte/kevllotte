@@ -3,7 +3,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { makeFetchPostTagsUseCase } from '@/infra/database/prisma/factories/make-fetch-post-tags-use-case'
 
 import { PostTagPresenter } from '../../presenters/post-tag-presenter'
-import { fetchPostTagsParamsSchema, paginationQuerySchema } from './schemas'
+import { paginationQuerySchema } from '../schemas'
+import { fetchPostTagsParamsSchema } from './schemas'
 
 export async function fetchPostTags(
   request: FastifyRequest,

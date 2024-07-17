@@ -1,19 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeFetchAuthorPostsUseCase } from '@/infra/database/prisma/factories/make-fetch-author-posts-use-case'
+import { makeFetchPostsUseCase } from '@/infra/database/prisma/factories/make-fetch-posts-use-case'
 
 import { PostPresenter } from '../../presenters/post-presenter'
 import { paginationQuerySchema } from '../schemas'
 
 export async function fetchPosts(request: FastifyRequest, reply: FastifyReply) {
-  const authorId = await request.getCurrentUserId()
-
   const { page } = paginationQuerySchema.parse(request.query)
 
-  const fetchAuthorPostsUseCase = makeFetchAuthorPostsUseCase()
+  const fetchPostsUseCase = makeFetchPostsUseCase()
 
-  const result = await fetchAuthorPostsUseCase.execute({
-    authorId,
+  const result = await fetchPostsUseCase.execute({
     page,
   })
 

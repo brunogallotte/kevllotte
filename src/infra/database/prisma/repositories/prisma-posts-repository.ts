@@ -34,6 +34,15 @@ export class PrismaPostsRepository implements PostsRepository {
     return posts.map((post) => PrismaPostMapper.toDomain(post))
   }
 
+  async findMany({ page }: PaginationParams) {
+    const posts = await prisma.post.findMany({
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return posts.map((post) => PrismaPostMapper.toDomain(post))
+  }
+
   async delete(post: Post) {
     await prisma.post.delete({
       where: {

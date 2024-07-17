@@ -24,6 +24,12 @@ export class InMemoryPostsRepository implements PostsRepository {
     return posts
   }
 
+  async findMany({ page }: PaginationParams) {
+    const posts = this.items.slice((page - 1) * 20, page * 20)
+
+    return posts
+  }
+
   async delete(post: Post) {
     const itemIndex = this.items.findIndex((item) => item.id === post.id)
 

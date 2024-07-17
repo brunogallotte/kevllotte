@@ -1,9 +1,5 @@
 import { z } from 'zod'
 
-export const paginationQuerySchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-})
-
 export const createPostBodySchema = z.object({
   title: z.string(),
   content: z.string(),
