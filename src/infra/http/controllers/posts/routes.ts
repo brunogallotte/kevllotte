@@ -10,11 +10,14 @@ import { edit } from './edit'
 import { fetchPostComments } from './fetch-post-comments'
 import { fetchPostTags } from './fetch-post-tags'
 import { fetchPosts } from './fetch-posts'
+import { fetchSavedPosts } from './fetch-saved-posts'
 import { like } from './like'
 import { likeComment } from './like-comment'
 import { removeCommentLike } from './remove-comment-like'
 import { removePostLike } from './remove-post-like'
+import { removeSavedPost } from './remove-saved-post'
 import { replyToComment } from './reply-to-comment'
+import { save } from './save-post'
 import {
   commentOnPostBodySchema,
   commentOnPostParamsSchema,
@@ -28,8 +31,10 @@ import {
   likePostParamsSchema,
   removeCommentLikeParamsSchema,
   removePostLikeParamsSchema,
+  removeSavedPostParamsSchema,
   replyToCommentBodySchema,
   replyToCommentParamsSchema,
+  savePostParamsSchema,
 } from './schemas'
 
 export async function postRoutes(app: FastifyInstance) {
@@ -228,5 +233,52 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       fetchPosts,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:postId/save',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Save a post',
+          security: [{ bearerAuth: [] }],
+          params: savePostParamsSchema,
+        },
+      },
+      save,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .delete(
+      '/posts/save/:savedPostId',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Remove a saved post',
+          security: [{ bearerAuth: [] }],
+          params: removeSavedPostParamsSchema,
+        },
+      },
+      removeSavedPost,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/posts/save',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Fetch saved posts',
+          security: [{ bearerAuth: [] }],
+        },
+      },
+      fetchSavedPosts,
     )
 }

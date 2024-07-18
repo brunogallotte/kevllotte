@@ -63,3 +63,11 @@ export const removeCommentLikeParamsSchema = z.object({
 export const fetchPostTagsParamsSchema = z.object({
   postId: z.string().uuid(),
 })
+
+export const savePostParamsSchema = z.object({
+  postId: z.string().uuid(),
+})
+
+export const removeSavedPostParamsSchema = z.object({
+  savedPostId: z.string().uuid(),
+})

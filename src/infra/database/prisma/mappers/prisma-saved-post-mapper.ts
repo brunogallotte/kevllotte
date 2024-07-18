@@ -1,20 +1,13 @@
-import type {
-  Post as PrismaPost,
-  PostLike as PrismaPostLike,
-  PostStatus,
-  Prisma,
-} from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Post, POST_STATUS } from '@/domain/blog/enterprise/entities/post'
 import { PostLike } from '@/domain/blog/enterprise/entities/post-like'
 import { Slug } from '@/domain/blog/enterprise/entities/value-objects/slug'
 
-export type PrismaPostWithLikes = PrismaPost & {
-  likes: PrismaPostLike[]
-}
+import type { PrismaPostWithLikes } from './prisma-post-mapper'
 
-export class PrismaPostMapper {
+export class PrismaSavedPostMapper {
   static toDomain(raw: PrismaPostWithLikes): Post {
     return Post.create(
       {
@@ -38,17 +31,11 @@ export class PrismaPostMapper {
     )
   }
 
-  static toPrisma(post: Post): Prisma.PostUncheckedCreateInput {
+  static toPrisma(post: Post): Prisma.SavedPostUncheckedCreateInput {
     return {
-      id: post.id.toString(),
-      title: post.title,
-      content: post.content,
+      postId: post.id.toString(),
       userId: post.authorId.toString(),
-      status: POST_STATUS[post.status] as PostStatus,
-      collabId: post.collabId?.toString() ?? undefined,
-      slug: post.slug.value,
       createdAt: post.createdAt,
-      updatedAt: post.updatedAt ?? undefined,
     }
   }
 }
