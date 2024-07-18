@@ -4,6 +4,7 @@ import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
+import type { PostLike } from './post-like'
 import { Slug } from './value-objects/slug'
 
 export enum POST_STATUS {
@@ -18,6 +19,7 @@ export type PostProps = {
   slug: Slug
   status: POST_STATUS
   collabId?: UniqueEntityID
+  likes: PostLike[]
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -45,6 +47,10 @@ export class Post extends AggregateRoot<PostProps> {
 
   get collabId() {
     return this.props.collabId
+  }
+
+  get likes() {
+    return this.props.likes
   }
 
   get createdAt() {
@@ -87,8 +93,14 @@ export class Post extends AggregateRoot<PostProps> {
     this.touch()
   }
 
+  set likes(likes: PostLike[]) {
+    this.props.likes = likes
+
+    this.touch()
+  }
+
   static create(
-    props: Optional<PostProps, 'createdAt' | 'slug' | 'collabId'>,
+    props: Optional<PostProps, 'createdAt' | 'slug' | 'collabId' | 'likes'>,
     id?: UniqueEntityID,
   ) {
     const post = new Post(
@@ -97,6 +109,7 @@ export class Post extends AggregateRoot<PostProps> {
         slug: props.slug ?? Slug.createFromText(props.title),
         collabId: props.collabId ?? undefined,
         createdAt: props.createdAt ?? new Date(),
+        likes: props.likes ?? [],
       },
       id,
     )

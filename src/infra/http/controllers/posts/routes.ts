@@ -169,7 +169,7 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/posts/:postId/comments/:commentId/likes',
+      '/posts/comments/:commentId/likes',
       {
         schema: {
           tags: ['Posts'],
@@ -185,7 +185,7 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .delete(
-      '/posts/:postId/comments/:commentId/likes/:likeId',
+      '/posts/comments/:commentId/likes/:likeId',
       {
         schema: {
           tags: ['Posts'],

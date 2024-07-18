@@ -41,6 +41,10 @@ export class LikeCommentUseCase {
 
     await this.commentLikesRepository.create(commentLike)
 
+    comment.likes = [...comment.likes, commentLike]
+
+    await this.postCommentsRepository.save(comment)
+
     return right({ commentLike })
   }
 }

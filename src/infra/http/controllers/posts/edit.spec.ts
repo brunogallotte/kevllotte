@@ -41,7 +41,7 @@ describe('Edit Post (e2e)', () => {
       })
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body.post.props).toEqual(
+    expect(response.body.post).toEqual(
       expect.objectContaining({
         title: 'Edited post',
         content: 'Edited post',

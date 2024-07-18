@@ -13,6 +13,9 @@ export class PrismaPostsRepository implements PostsRepository {
       where: {
         id,
       },
+      include: {
+        likes: true,
+      },
     })
 
     if (!post) {
@@ -27,6 +30,9 @@ export class PrismaPostsRepository implements PostsRepository {
       where: {
         userId: authorId,
       },
+      include: {
+        likes: true,
+      },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -36,6 +42,9 @@ export class PrismaPostsRepository implements PostsRepository {
 
   async findMany({ page }: PaginationParams) {
     const posts = await prisma.post.findMany({
+      include: {
+        likes: true,
+      },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -68,6 +77,14 @@ export class PrismaPostsRepository implements PostsRepository {
         title: post.title,
         content: post.content,
         status: POST_STATUS[post.status] as PostStatus,
+        likes: {
+          deleteMany: {},
+          createMany: {
+            data: post.likes.map((like) => ({
+              userId: like.authorId.toString(),
+            })),
+          },
+        },
       },
     })
   }

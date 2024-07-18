@@ -19,7 +19,7 @@ export class PostComment extends Comment<PostCommentProps> {
   }
 
   static create(
-    props: Optional<PostCommentProps, 'createdAt' | 'replyToId'>,
+    props: Optional<PostCommentProps, 'createdAt' | 'replyToId' | 'likes'>,
     id?: UniqueEntityID,
   ) {
     const postComment = new PostComment(
@@ -27,6 +27,7 @@ export class PostComment extends Comment<PostCommentProps> {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         replyToId: props.replyToId ?? undefined,
+        likes: props.likes ?? [],
       },
       id,
     )

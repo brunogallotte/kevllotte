@@ -10,6 +10,9 @@ export class PrismaPostCommentsRepository implements PostCommentsRepository {
       where: {
         id,
       },
+      include: {
+        likes: true,
+      },
     })
 
     if (!postComment) {
@@ -24,6 +27,9 @@ export class PrismaPostCommentsRepository implements PostCommentsRepository {
       where: {
         postId,
       },
+      include: {
+        likes: true,
+      },
     })
 
     return postComments.map((postComment) =>
@@ -36,6 +42,25 @@ export class PrismaPostCommentsRepository implements PostCommentsRepository {
 
     await prisma.postComment.create({
       data,
+    })
+  }
+
+  async save(postComment: PostComment) {
+    await prisma.postComment.update({
+      where: {
+        id: postComment.id.toString(),
+      },
+      data: {
+        content: postComment.content,
+        likes: {
+          deleteMany: {},
+          createMany: {
+            data: postComment.likes.map((like) => ({
+              userId: like.authorId.toString(),
+            })),
+          },
+        },
+      },
     })
   }
 

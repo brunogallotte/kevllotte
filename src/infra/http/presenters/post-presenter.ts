@@ -1,5 +1,7 @@
 import type { Post } from '@/domain/blog/enterprise/entities/post'
 
+import { PostLikePresenter } from './post-like-presenter'
+
 export class PostPresenter {
   static toHTTP(post: Post) {
     return {
@@ -10,6 +12,7 @@ export class PostPresenter {
       collabId: post.collabId ? post.collabId.toString() : undefined,
       status: post.status,
       slug: post.slug,
+      likes: post.likes.map((like) => PostLikePresenter.toHTTP(like)),
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
     }

@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { POST_STATUS } from '@/domain/blog/enterprise/entities/post'
 import { makeCreatePostUseCase } from '@/infra/database/prisma/factories/make-create-post-use-case'
 
+import { PostPresenter } from '../../presenters/post-presenter'
 import { createPostBodySchema } from './schemas'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
@@ -26,5 +27,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send()
   }
 
-  return reply.status(201).send({ post: result.value.post })
+  const post = result.value.post
+
+  return reply.status(201).send({ post: PostPresenter.toHTTP(post) })
 }

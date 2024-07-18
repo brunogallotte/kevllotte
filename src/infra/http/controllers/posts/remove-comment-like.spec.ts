@@ -35,8 +35,6 @@ describe('Remove Comment Like (e2e)', () => {
       authorId: user.id,
     })
 
-    const postId = post.id.toString()
-
     const comment = await postCommentFactory.makePrismaPostComment({
       authorId: user.id,
       postId: post.id,
@@ -52,7 +50,7 @@ describe('Remove Comment Like (e2e)', () => {
     const likeId = like.id.toString()
 
     const response = await request(app.server)
-      .delete(`/posts/${postId}/comments/${commentId}/likes/${likeId}`)
+      .delete(`/posts/comments/${commentId}/likes/${likeId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

@@ -39,11 +39,10 @@ describe('Like Comment (e2e)', () => {
       authorId: user.id,
     })
 
-    const postId = post.id.toString()
     const commentId = comment.id.toString()
 
     const response = await request(app.server)
-      .post(`/posts/${postId}/comments/${commentId}/likes`)
+      .post(`/posts/comments/${commentId}/likes`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

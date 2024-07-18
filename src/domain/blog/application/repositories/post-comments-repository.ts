@@ -9,5 +9,6 @@ export type PostCommentsRepository = {
     params: PaginationParams,
   ): Promise<PostComment[]>
   create(postComment: PostComment): Promise<void>
+  save(postComment: PostComment): Promise<void>
   delete(postComment: PostComment): Promise<void>
 }

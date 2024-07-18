@@ -41,6 +41,10 @@ export class LikePostUseCase {
 
     await this.postLikesRepository.create(postLike)
 
+    post.likes = [...post.likes, postLike]
+
+    await this.postsRepository.save(post)
+
     return right({ postLike })
   }
 }

@@ -30,6 +30,12 @@ export class InMemoryPostCommentsRepository implements PostCommentsRepository {
     return postComments
   }
 
+  async save(postComment: PostComment) {
+    const itemIndex = this.items.findIndex((item) => item.id === postComment.id)
+
+    this.items[itemIndex] = postComment
+  }
+
   async delete(postComment: PostComment) {
     const itemIndex = this.items.findIndex((item) => item.id === postComment.id)
 

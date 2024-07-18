@@ -8,27 +8,27 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  name         String
-  email        String         @unique
-  password     String         @map("password_hash")
-  bio          String?
-  avatarUrl    String?        @map("avatar_url")
-  linkedinUrl  String?        @map("linkedin_url")
-  githubUrl    String?        @map("github_url")
-  instagramUrl String?        @map("instagram_url")
-  twitterUrl   String?        @map("twitter_url")
-  websiteUrl   String?        @map("website_url")
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  posts        Post[]
-  followers    Follower[]     @relation("followers")
-  following    Follower[]     @relation("following")
-  SavedPost    SavedPost[]
-  LikedPost    PostLike[]
-  PostComment  PostComment[]
-  Notification Notification[]
-  CommentLike  CommentLike[]
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String         @map("password_hash")
+  bio           String?
+  avatarUrl     String?        @map("avatar_url")
+  linkedinUrl   String?        @map("linkedin_url")
+  githubUrl     String?        @map("github_url")
+  instagramUrl  String?        @map("instagram_url")
+  twitterUrl    String?        @map("twitter_url")
+  websiteUrl    String?        @map("website_url")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  posts         Post[]
+  followers     Follower[]     @relation("followers")
+  following     Follower[]     @relation("following")
+  savedPosts    SavedPost[]
+  likedPosts    PostLike[]
+  postComments  PostComment[]
+  notifications Notification[]
+  commentLikes  CommentLike[]
 
   @@map("users")
 }
@@ -45,20 +45,20 @@ model Follower {
 }
 
 model Post {
-  id          String        @id @default(uuid())
-  title       String
-  content     String
-  userId      String        @map("user_id")
-  collabId    String?       @map("collab_id")
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  status      PostStatus    @default(DRAFT)
-  slug        String
-  User        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SavedPost   SavedPost[]
-  Likes       PostLike[]
-  PostComment PostComment[]
-  PostTags    Tag[]
+  id           String        @id @default(uuid())
+  title        String
+  content      String
+  userId       String        @map("user_id")
+  collabId     String?       @map("collab_id")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  status       PostStatus    @default(DRAFT)
+  slug         String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savedPosts   SavedPost[]
+  likes        PostLike[]
+  postComments PostComment[]
+  postTags     Tag[]
 
   @@map("posts")
 }
@@ -68,8 +68,8 @@ model SavedPost {
   userId    String   @map("user_id")
   postId    String   @map("post_id")
   createdAt DateTime @default(now()) @map("created_at")
-  User      User     @relation(fields: [userId], references: [id])
-  Post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
 
   @@map("saved_posts")
 }
@@ -80,8 +80,8 @@ model PostLike {
   postId    String   @map("post_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  User User @relation(fields: [userId], references: [id])
-  Post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@map("posts_like")
 }
@@ -92,8 +92,8 @@ model CommentLike {
   commentId String   @map("comment_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  User    User        @relation(fields: [userId], references: [id])
-  Comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User        @relation(fields: [userId], references: [id])
+  comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@map("comments_like")
 }
@@ -110,9 +110,9 @@ model PostComment {
   replyTo   PostComment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies   PostComment[] @relation("ReplyTo")
 
-  User  User          @relation(fields: [userId], references: [id])
-  Post  Post          @relation(fields: [postId], references: [id])
-  Likes CommentLike[]
+  user  User          @relation(fields: [userId], references: [id])
+  post  Post          @relation(fields: [postId], references: [id])
+  likes CommentLike[]
 
   @@map("posts_comment")
 }
@@ -122,7 +122,7 @@ model Tag {
   name      String
   createdAt DateTime @default(now()) @map("created_at")
 
-  Post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String @map("post_id")
 
   @@map("tags")
@@ -133,7 +133,7 @@ model Notification {
   content   String
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("notifications")
 }

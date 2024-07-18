@@ -5,6 +5,7 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { POST_STATUS } from '@/domain/blog/enterprise/entities/post'
 import { makeEditPostUseCase } from '@/infra/database/prisma/factories/make-edit-post-use-case'
 
+import { PostPresenter } from '../../presenters/post-presenter'
 import { editPostBodySchema, editPostParamsSchema } from './schemas'
 
 export async function edit(request: FastifyRequest, reply: FastifyReply) {
@@ -37,5 +38,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
-  return reply.status(200).send({ post: result.value.post })
+  const post = result.value.post
+
+  return reply.status(200).send({ post: PostPresenter.toHTTP(post) })
 }
