@@ -7,6 +7,7 @@ import { comment } from './comment'
 import { create } from './create'
 import { deletePost } from './delete'
 import { edit } from './edit'
+import { editComment } from './edit-post-comment'
 import { fetchPostComments } from './fetch-post-comments'
 import { fetchPostTags } from './fetch-post-tags'
 import { fetchPosts } from './fetch-posts'
@@ -24,6 +25,8 @@ import {
   createPostBodySchema,
   deletePostBodySchema,
   editPostBodySchema,
+  editPostCommentBodySchema,
+  editPostCommentParamsSchema,
   editPostParamsSchema,
   fetchPostCommentsParamsSchema,
   fetchPostTagsParamsSchema,
@@ -102,6 +105,23 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       comment,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .put(
+      '/posts/comments/:commentId',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Edit a post comment',
+          security: [{ bearerAuth: [] }],
+          body: editPostCommentBodySchema,
+          params: editPostCommentParamsSchema,
+        },
+      },
+      editComment,
     )
 
   app

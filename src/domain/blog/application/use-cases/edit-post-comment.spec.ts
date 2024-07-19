@@ -4,16 +4,16 @@ import { InMemoryPostCommentsRepository } from 'test/repositories/in-memory-post
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
-import { EditCommentUseCase } from './edit-comment'
+import { EditPostCommentUseCase } from './edit-post-comment'
 
 let inMemoryPostCommentsRepository: InMemoryPostCommentsRepository
-let sut: EditCommentUseCase
+let sut: EditPostCommentUseCase
 
-describe('Edit Comment', () => {
+describe('Edit Post Comment', () => {
   beforeEach(() => {
     inMemoryPostCommentsRepository = new InMemoryPostCommentsRepository()
 
-    sut = new EditCommentUseCase(inMemoryPostCommentsRepository)
+    sut = new EditPostCommentUseCase(inMemoryPostCommentsRepository)
   })
 
   it('should be able to edit a post comment', async () => {

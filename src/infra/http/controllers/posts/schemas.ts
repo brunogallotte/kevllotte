@@ -71,3 +71,11 @@ export const savePostParamsSchema = z.object({
 export const removeSavedPostParamsSchema = z.object({
   savedPostId: z.string().uuid(),
 })
+
+export const editPostCommentBodySchema = z.object({
+  content: z.string(),
+})
+
+export const editPostCommentParamsSchema = z.object({
+  commentId: z.string().uuid(),
+})

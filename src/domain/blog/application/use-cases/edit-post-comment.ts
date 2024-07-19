@@ -5,41 +5,41 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import type { PostComment } from '../../enterprise/entities/post-comment'
 import type { PostCommentsRepository } from '../repositories/post-comments-repository'
 
-type EditCommentUseCaseRequest = {
+type EditPostCommentUseCaseRequest = {
   commentId: string
   authorId: string
   content: string
 }
 
-type EditCommentUseCaseResponse = Either<
+type EditPostCommentUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
   {
-    comment: PostComment
+    postComment: PostComment
   }
 >
 
-export class EditCommentUseCase {
+export class EditPostCommentUseCase {
   constructor(private postCommentsRepository: PostCommentsRepository) {}
 
   async execute({
     commentId,
     authorId,
     content,
-  }: EditCommentUseCaseRequest): Promise<EditCommentUseCaseResponse> {
-    const comment = await this.postCommentsRepository.findById(commentId)
+  }: EditPostCommentUseCaseRequest): Promise<EditPostCommentUseCaseResponse> {
+    const postComment = await this.postCommentsRepository.findById(commentId)
 
-    if (!comment) {
+    if (!postComment) {
       return left(new ResourceNotFoundError())
     }
 
-    if (authorId !== comment.authorId.toString()) {
+    if (authorId !== postComment.authorId.toString()) {
       return left(new NotAllowedError())
     }
 
-    comment.content = content
+    postComment.content = content
 
-    await this.postCommentsRepository.save(comment)
+    await this.postCommentsRepository.save(postComment)
 
-    return right({ comment })
+    return right({ postComment })
   }
 }
