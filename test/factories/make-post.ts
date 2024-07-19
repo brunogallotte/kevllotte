@@ -7,7 +7,6 @@ import {
   type PostProps,
 } from '@/domain/blog/enterprise/entities/post'
 import { PrismaPostMapper } from '@/infra/database/prisma/mappers/prisma-post-mapper'
-import { PrismaSavedPostMapper } from '@/infra/database/prisma/mappers/prisma-saved-post-mapper'
 import { prisma } from '@/lib/prisma'
 
 export function makePost(
@@ -38,14 +37,4 @@ export class PostFactory {
 
     return post
   }
-
-  // async makePrismaSavedPost(data: Partial<PostProps> = {}): Promise<Post> {
-  //   const savedPost = makePost(data)
-
-  //   await prisma.savedPost.create({
-  //     data: PrismaSavedPostMapper.toPrisma(savedPost),
-  //   })
-
-  //   return savedPost
-  // }
 }
