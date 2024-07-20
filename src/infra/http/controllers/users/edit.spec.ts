@@ -20,8 +20,6 @@ describe('Edit Author Profile (e2e)', () => {
   it('should be able to edit an author profile', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
-    console.log(user)
-
     const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.server)
