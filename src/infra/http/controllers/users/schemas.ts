@@ -3,6 +3,10 @@ import { z } from 'zod'
 export const registerAuthorBodySchema = z.object({
   name: z.string(),
   email: z.string().email(),
+  username: z
+    .string()
+    .min(4, { message: 'Username must have at least 4 characters' })
+    .regex(/^[a-z0-9_-]+$/),
   password: z.string().min(8),
   bio: z.string().optional(),
   avatarUrl: z.string().optional(),
@@ -20,6 +24,10 @@ export const authenticateAuthorBodySchema = z.object({
 
 export const editAuthorProfileBodySchema = z.object({
   name: z.string().optional(),
+  username: z
+    .string()
+    .min(4, { message: 'Username must have at least 4 characters' })
+    .regex(/^[a-z0-9_-]+$/),
   bio: z.string().optional(),
   avatarUrl: z.string().optional(),
   linkedinUrl: z.string().optional(),

@@ -11,6 +11,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const {
     name,
     email,
+    username,
     password,
     bio,
     avatarUrl,
@@ -26,6 +27,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const result = await registerAuthorUseCase.execute({
     name,
     email,
+    username,
     password,
     bio: bio ?? null,
     avatarUrl: avatarUrl ?? null,

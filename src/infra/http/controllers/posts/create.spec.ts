@@ -1,11 +1,15 @@
 import request from 'supertest'
-import { createAndAuthenticateUser } from 'test/utils/create-and-authenticate-user'
+import { AuthorFactory } from 'test/factories/make-author'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
 describe('Create Post (e2e)', () => {
+  let authorFactory: AuthorFactory
+
   beforeAll(async () => {
+    authorFactory = new AuthorFactory()
+
     await app.ready()
   })
 
@@ -14,7 +18,9 @@ describe('Create Post (e2e)', () => {
   })
 
   it('should be able to create a post', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const user = await authorFactory.makePrismaAuthor()
+
+    const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.server)
       .post('/posts')

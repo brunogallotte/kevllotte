@@ -9,6 +9,7 @@ export class PrismaAuthorMapper {
       {
         email: raw.email,
         name: raw.name,
+        username: raw.username,
         password: raw.password,
         bio: raw.bio,
         avatarUrl: raw.avatarUrl,
@@ -28,6 +29,7 @@ export class PrismaAuthorMapper {
     return {
       id: author.id.toString(),
       name: author.name,
+      username: author.username,
       email: author.email,
       password: author.password,
       bio: author.bio,

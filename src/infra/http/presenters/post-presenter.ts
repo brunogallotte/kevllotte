@@ -11,7 +11,7 @@ export class PostPresenter {
       userId: post.authorId.toString(),
       collabId: post.collabId ? post.collabId.toString() : undefined,
       status: post.status,
-      slug: post.slug,
+      slug: post.slug.value,
       likes: post.likes.map((like) => PostLikePresenter.toHTTP(like)),
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,

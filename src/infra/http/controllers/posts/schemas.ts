@@ -48,7 +48,6 @@ export const likePostParamsSchema = z.object({
 
 export const removePostLikeParamsSchema = z.object({
   postId: z.string().uuid(),
-  likeId: z.string().uuid(),
 })
 
 export const likeCommentParamsSchema = z.object({

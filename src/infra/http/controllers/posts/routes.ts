@@ -178,7 +178,7 @@ export async function postRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .delete(
-      '/posts/:postId/likes/:likeId',
+      '/posts/:postId/likes',
       {
         schema: {
           tags: ['Posts'],

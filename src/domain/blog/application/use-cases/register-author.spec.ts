@@ -19,6 +19,7 @@ describe('Register Author', () => {
     const result = await sut.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      username: 'johndoe',
       password: '12345678',
       bio: null,
       avatarUrl: null,
@@ -39,6 +40,7 @@ describe('Register Author', () => {
     const result = await sut.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      username: 'johndoe',
       password: '12345678',
       bio: null,
       avatarUrl: null,

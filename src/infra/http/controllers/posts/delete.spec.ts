@@ -1,13 +1,18 @@
 import request from 'supertest'
-import { createAndAuthenticateUser } from 'test/utils/create-and-authenticate-user'
+import { AuthorFactory } from 'test/factories/make-author'
+import { PostFactory } from 'test/factories/make-post'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-
-import { prisma } from '@/lib/prisma'
 
 import { app } from '../../app'
 
 describe('Delete Post (e2e)', () => {
+  let authorFactory: AuthorFactory
+  let postFactory: PostFactory
+
   beforeAll(async () => {
+    authorFactory = new AuthorFactory()
+    postFactory = new PostFactory()
+
     await app.ready()
   })
 
@@ -16,24 +21,21 @@ describe('Delete Post (e2e)', () => {
   })
 
   it('should be able to delete a post', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const user = await authorFactory.makePrismaAuthor()
 
-    const user = await prisma.user.findFirstOrThrow()
+    const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
-    const post = await prisma.post.create({
-      data: {
-        userId: user.id,
-        title: 'Test post',
-        content: 'Test post content',
-        slug: 'test-post',
-      },
+    const post = await postFactory.makePrismaPost({
+      authorId: user.id,
     })
+
+    const postId = post.id.toString()
 
     const deletePostResponse = await request(app.server)
       .delete('/posts/delete')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        postId: post.id,
+        postId,
       })
 
     expect(deletePostResponse.statusCode).toEqual(200)

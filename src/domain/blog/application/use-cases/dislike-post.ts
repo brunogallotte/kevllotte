@@ -6,7 +6,7 @@ import type { PostLikesRepository } from '../repositories/post-likes-repository'
 
 type DislikePostUseCaseRequest = {
   authorId: string
-  likeId: string
+  postId: string
 }
 
 type DislikePostUseCaseResponse = Either<
@@ -19,9 +19,12 @@ export class DislikePostUseCase {
 
   async execute({
     authorId,
-    likeId,
+    postId,
   }: DislikePostUseCaseRequest): Promise<DislikePostUseCaseResponse> {
-    const postLike = await this.postLikesRepository.findById(likeId)
+    const postLike = await this.postLikesRepository.findByPostAndAuthorId(
+      postId,
+      authorId,
+    )
 
     if (!postLike) {
       return left(new ResourceNotFoundError())

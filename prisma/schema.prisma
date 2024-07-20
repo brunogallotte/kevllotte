@@ -11,6 +11,7 @@ model User {
   id            String         @id @default(uuid())
   name          String
   email         String         @unique
+  username      String         @unique
   password      String         @map("password_hash")
   bio           String?
   avatarUrl     String?        @map("avatar_url")

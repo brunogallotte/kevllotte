@@ -5,10 +5,11 @@ import { prisma } from '@/lib/prisma'
 import { PrismaPostLikeMapper } from '../mappers/prisma-post-like-mapper'
 
 export class PrismaPostLikesRepository implements PostLikesRepository {
-  async findById(id: string) {
-    const postLike = await prisma.postLike.findUnique({
+  async findByPostAndAuthorId(postId: string, authorId: string) {
+    const postLike = await prisma.postLike.findFirst({
       where: {
-        id,
+        postId,
+        userId: authorId,
       },
     })
 
@@ -17,16 +18,6 @@ export class PrismaPostLikesRepository implements PostLikesRepository {
     }
 
     return PrismaPostLikeMapper.toDomain(postLike)
-  }
-
-  async findManyByPostId(postId: string) {
-    const postLikes = await prisma.postLike.findMany({
-      where: {
-        postId,
-      },
-    })
-
-    return postLikes.map((postLike) => PrismaPostLikeMapper.toDomain(postLike))
   }
 
   async create(postLike: PostLike) {

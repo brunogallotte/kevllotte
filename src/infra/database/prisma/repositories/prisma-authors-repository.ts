@@ -33,6 +33,20 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     return PrismaAuthorMapper.toDomain(author)
   }
 
+  async findByUsername(username: string) {
+    const author = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    })
+
+    if (!author) {
+      return null
+    }
+
+    return PrismaAuthorMapper.toDomain(author)
+  }
+
   async create(author: Author) {
     const data = PrismaAuthorMapper.toPrisma(author)
 

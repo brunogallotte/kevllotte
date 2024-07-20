@@ -5,6 +5,7 @@ export class AuthorPresenter {
     return {
       id: author.id.toString(),
       name: author.name,
+      username: author.username,
       email: author.email,
       bio: author.bio,
       linkedinUrl: author.linkedinUrl,

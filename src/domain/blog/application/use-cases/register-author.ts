@@ -8,6 +8,7 @@ import { AuthorAlreadyExistsError } from './errors/author-already-exists-error'
 export type RegisterAuthorUseCaseRequest = {
   name: string
   email: string
+  username: string
   password: string
   bio: string | null
   avatarUrl: string | null
@@ -34,6 +35,7 @@ export class RegisterAuthorUseCase {
   async execute({
     name,
     email,
+    username,
     password,
     bio,
     avatarUrl,
@@ -49,11 +51,19 @@ export class RegisterAuthorUseCase {
       return left(new AuthorAlreadyExistsError(email))
     }
 
+    const userWithSameUsername =
+      await this.authorsRepository.findByUsername(username)
+
+    if (userWithSameUsername) {
+      return left(new AuthorAlreadyExistsError(username))
+    }
+
     const hashedPassword = await this.hashGenerator.hash(password)
 
     const author = Author.create({
       name,
       email,
+      username,
       password: hashedPassword,
       bio: bio ?? null,
       avatarUrl: avatarUrl ?? null,

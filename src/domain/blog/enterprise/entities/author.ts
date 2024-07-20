@@ -5,6 +5,7 @@ import type { Optional } from '@/core/types/optional'
 export type AuthorProps = {
   name: string
   email: string
+  username: string
   password: string
   bio: string | null
   avatarUrl: string | null
@@ -24,6 +25,10 @@ export class Author extends Entity<AuthorProps> {
 
   get email() {
     return this.props.email
+  }
+
+  get username() {
+    return this.props.username
   }
 
   get password() {
@@ -72,6 +77,12 @@ export class Author extends Entity<AuthorProps> {
 
   set name(name: string) {
     this.props.name = name
+
+    this.touch()
+  }
+
+  set username(username: string) {
+    this.props.username = username
 
     this.touch()
   }

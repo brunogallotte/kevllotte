@@ -1,11 +1,15 @@
 import request from 'supertest'
-import { createAndAuthenticateUser } from 'test/utils/create-and-authenticate-user'
+import { AuthorFactory } from 'test/factories/make-author'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
 describe('Edit Author Profile (e2e)', () => {
+  let authorFactory: AuthorFactory
+
   beforeAll(async () => {
+    authorFactory = new AuthorFactory()
+
     await app.ready()
   })
 
@@ -14,22 +18,28 @@ describe('Edit Author Profile (e2e)', () => {
   })
 
   it('should be able to edit an author profile', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const user = await authorFactory.makePrismaAuthor()
+
+    console.log(user)
+
+    const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.server)
       .patch('/users/edit')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         bio: 'Test bio',
+        username: 'johndoe',
         avatarUrl: 'https://test-url.com',
       })
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body.author).toEqual(
-      expect.objectContaining({
+    expect(response.body).toEqual({
+      author: expect.objectContaining({
         bio: 'Test bio',
+        username: 'johndoe',
         avatarUrl: 'https://test-url.com',
       }),
-    )
+    })
   })
 })

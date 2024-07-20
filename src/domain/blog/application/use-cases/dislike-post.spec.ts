@@ -27,11 +27,11 @@ describe('Dislike Post', () => {
     await inMemoryPostLikesRepository.create(postLike)
 
     const authorId = postLike.authorId.toString()
-    const likeId = postLike.id.toString()
+    const postId = postLike.postId.toString()
 
     const result = await sut.execute({
       authorId,
-      likeId,
+      postId,
     })
 
     expect(result.isRight()).toBe(true)

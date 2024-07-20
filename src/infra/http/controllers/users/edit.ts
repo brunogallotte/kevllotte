@@ -12,6 +12,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
 
   const {
     name,
+    username,
     bio,
     avatarUrl,
     linkedinUrl,
@@ -26,6 +27,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
   const result = await editAuthorProfileUseCase.execute({
     authorId,
     name,
+    username,
     bio,
     avatarUrl,
     linkedinUrl,
@@ -48,7 +50,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
-  return reply
-    .status(200)
-    .send({ author: AuthorPresenter.toHTTP(result.value.author) })
+  const author = result.value.author
+
+  return reply.status(200).send({ author: AuthorPresenter.toHTTP(author) })
 }

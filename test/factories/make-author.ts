@@ -16,6 +16,7 @@ export function makeAuthor(
     {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      username: faker.internet.userName().toLowerCase(),
       password: faker.internet.password(),
       bio: faker.lorem.words(10),
       avatarUrl: faker.internet.url(),

@@ -12,13 +12,13 @@ export async function removePostLike(
 ) {
   const authorId = await request.getCurrentUserId()
 
-  const { likeId } = removePostLikeParamsSchema.parse(request.params)
+  const { postId } = removePostLikeParamsSchema.parse(request.params)
 
   const dislikePostUseCase = makeDislikePostUseCase()
 
   const result = await dislikePostUseCase.execute({
     authorId,
-    likeId,
+    postId,
   })
 
   if (result.isLeft()) {

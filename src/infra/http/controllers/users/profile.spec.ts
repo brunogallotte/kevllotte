@@ -1,11 +1,15 @@
 import request from 'supertest'
-import { createAndAuthenticateUser } from 'test/utils/create-and-authenticate-user'
+import { AuthorFactory } from 'test/factories/make-author'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
 describe('Get Author Profile (e2e)', () => {
+  let authorFactory: AuthorFactory
+
   beforeAll(async () => {
+    authorFactory = new AuthorFactory()
+
     await app.ready()
   })
 
@@ -14,7 +18,11 @@ describe('Get Author Profile (e2e)', () => {
   })
 
   it('should be able to get author profile', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const user = await authorFactory.makePrismaAuthor({
+      email: 'johndoe@example.com',
+    })
+
+    const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
     const profileResponse = await request(app.server)
       .get('/me')
@@ -22,10 +30,10 @@ describe('Get Author Profile (e2e)', () => {
       .send()
 
     expect(profileResponse.statusCode).toEqual(200)
-    expect(profileResponse.body.author).toEqual(
-      expect.objectContaining({
+    expect(profileResponse.body).toEqual({
+      author: expect.objectContaining({
         email: 'johndoe@example.com',
       }),
-    )
+    })
   })
 })

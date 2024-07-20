@@ -8,6 +8,7 @@ import type { AuthorsRepository } from '../repositories/authors-repository'
 export type EditAuthorProfileUseCaseRequest = {
   authorId: string
   name?: string
+  username?: string
   bio?: string
   avatarUrl?: string
   linkedinUrl?: string
@@ -30,6 +31,7 @@ export class EditAuthorProfileUseCase {
   async execute({
     authorId,
     name,
+    username,
     bio,
     avatarUrl,
     linkedinUrl,
@@ -49,6 +51,7 @@ export class EditAuthorProfileUseCase {
     }
 
     author.name = name ?? author.name
+    author.username = username ?? author.username
     author.bio = bio ?? author.bio
     author.avatarUrl = avatarUrl ?? author.avatarUrl
     author.linkedinUrl = linkedinUrl ?? author.linkedinUrl

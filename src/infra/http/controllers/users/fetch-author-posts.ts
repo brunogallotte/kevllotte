@@ -23,6 +23,8 @@ export async function fetchPosts(request: FastifyRequest, reply: FastifyReply) {
 
   const posts = result.value.posts
 
+  console.log(posts)
+
   return reply
     .status(200)
     .send({ posts: posts.map((post) => PostPresenter.toHTTP(post)) })

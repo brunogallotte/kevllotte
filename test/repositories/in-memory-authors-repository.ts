@@ -25,6 +25,16 @@ export class InMemoryAuthorsRepository implements AuthorsRepository {
     return author
   }
 
+  async findByUsername(username: string) {
+    const author = this.items.find((author) => author.username === username)
+
+    if (!author) {
+      return null
+    }
+
+    return author
+  }
+
   async update(author: Author) {
     const itemIndex = this.items.findIndex((item) => item.id === author.id)
 

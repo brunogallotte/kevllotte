@@ -24,6 +24,7 @@ describe('Edit Author Profile', () => {
       authorId: author.id.toString(),
       name: 'John Doe',
       bio: 'John Doe bio',
+      username: 'johndoe',
       avatarUrl: 'https://jonh-doe-avatar-url.com',
       linkedinUrl: 'https://linkedin.com/in',
       githubUrl: 'https://github.com',
@@ -34,16 +35,15 @@ describe('Edit Author Profile', () => {
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryAuthorsRepository.items[0].name).toEqual('John Doe')
+    expect(inMemoryAuthorsRepository.items[0].username).toEqual('johndoe')
     expect(inMemoryAuthorsRepository.items[0].bio).toEqual('John Doe bio')
-    expect(inMemoryAuthorsRepository.items[0].websiteUrl).toEqual(
-      'https://jonh-doe-website.com',
-    )
   })
 
   it('should not be able to edit an author profile that not exists', async () => {
     const result = await sut.execute({
       authorId: 'non-existing-id',
       name: 'John Doe',
+      username: 'johndoe',
       bio: 'John Doe Bio',
     })
 

@@ -16,6 +16,7 @@ describe('Refresh Token (e2e)', () => {
     await request(app.server).post('/users').send({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      username: 'johndoe',
       password: '12345678',
     })
 

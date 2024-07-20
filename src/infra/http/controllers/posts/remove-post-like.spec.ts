@@ -34,15 +34,13 @@ describe('Remove Post Post (e2e)', () => {
 
     const postId = post.id.toString()
 
-    const like = await postLikeFactory.makePrismaPostLike({
+    await postLikeFactory.makePrismaPostLike({
       authorId: user.id,
       postId: post.id,
     })
 
-    const likeId = like.id.toString()
-
     const response = await request(app.server)
-      .delete(`/posts/${postId}/likes/${likeId}`)
+      .delete(`/posts/${postId}/likes`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
