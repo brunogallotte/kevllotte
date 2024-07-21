@@ -42,6 +42,11 @@ export class PrismaPostsRepository implements PostsRepository {
 
   async findMany({ page }: PaginationParams) {
     const posts = await prisma.post.findMany({
+      where: {
+        status: {
+          not: 'DRAFT',
+        },
+      },
       include: {
         likes: true,
       },

@@ -3,6 +3,8 @@ import { AuthorFactory } from 'test/factories/make-author'
 import { PostFactory } from 'test/factories/make-post'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
+import { POST_STATUS } from '@/domain/blog/enterprise/entities/post'
+
 import { app } from '../../app'
 
 describe('Fetch Posts (e2e)', () => {
@@ -29,10 +31,12 @@ describe('Fetch Posts (e2e)', () => {
       await postFactory.makePrismaPost({
         authorId: user.id,
         title: 'Post 01',
+        status: POST_STATUS.PUBLISHED,
       }),
       await postFactory.makePrismaPost({
         authorId: user.id,
         title: 'Post 02',
+        status: POST_STATUS.PUBLISHED,
       }),
     ])
 

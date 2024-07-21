@@ -1,7 +1,7 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { PostsRepository } from '@/domain/blog/application/repositories/posts-repository'
-import type { Post } from '@/domain/blog/enterprise/entities/post'
+import { type Post, POST_STATUS } from '@/domain/blog/enterprise/entities/post'
 
 export class InMemoryPostsRepository implements PostsRepository {
   public items: Post[] = []
@@ -25,7 +25,9 @@ export class InMemoryPostsRepository implements PostsRepository {
   }
 
   async findMany({ page }: PaginationParams) {
-    const posts = this.items.slice((page - 1) * 20, page * 20)
+    const posts = this.items
+      .filter((item) => item.status !== POST_STATUS.DRAFT)
+      .slice((page - 1) * 20, page * 20)
 
     return posts
   }

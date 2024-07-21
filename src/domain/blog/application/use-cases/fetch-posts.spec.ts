@@ -3,6 +3,7 @@ import { InMemoryPostsRepository } from 'test/repositories/in-memory-posts-repos
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
+import { POST_STATUS } from '../../enterprise/entities/post'
 import { FetchPostsUseCase } from './fetch-posts'
 
 let inMemoryPostsRepository: InMemoryPostsRepository
@@ -19,18 +20,21 @@ describe('Fetch Posts', () => {
     await inMemoryPostsRepository.create(
       makePost({
         authorId: new UniqueEntityID('author-1'),
+        status: POST_STATUS.PUBLISHED,
       }),
     )
 
     await inMemoryPostsRepository.create(
       makePost({
         authorId: new UniqueEntityID('author-1'),
+        status: POST_STATUS.PUBLISHED,
       }),
     )
 
     await inMemoryPostsRepository.create(
       makePost({
         authorId: new UniqueEntityID('author-1'),
+        status: POST_STATUS.PUBLISHED,
       }),
     )
 
@@ -46,6 +50,7 @@ describe('Fetch Posts', () => {
       await inMemoryPostsRepository.create(
         makePost({
           authorId: new UniqueEntityID('author-1'),
+          status: POST_STATUS.PUBLISHED,
         }),
       )
     }
