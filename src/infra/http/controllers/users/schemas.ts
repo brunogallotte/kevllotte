@@ -40,3 +40,9 @@ export const editAuthorProfileBodySchema = z.object({
 export const fetchAuthorPostsQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1),
 })
+
+export const createReportBodySchema = z.object({
+  reportedAuthorId: z.string().uuid(),
+  reason: z.string(),
+  description: z.string(),
+})

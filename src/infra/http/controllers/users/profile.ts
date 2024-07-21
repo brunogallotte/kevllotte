@@ -25,7 +25,9 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
+  const author = result.value.author
+
   return reply.status(200).send({
-    author: AuthorPresenter.toHTTP(result.value.author),
+    author: AuthorPresenter.toHTTP(author),
   })
 }

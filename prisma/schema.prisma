@@ -8,28 +8,30 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  name          String
-  email         String         @unique
-  username      String         @unique
-  password      String         @map("password_hash")
-  bio           String?
-  avatarUrl     String?        @map("avatar_url")
-  linkedinUrl   String?        @map("linkedin_url")
-  githubUrl     String?        @map("github_url")
-  instagramUrl  String?        @map("instagram_url")
-  twitterUrl    String?        @map("twitter_url")
-  websiteUrl    String?        @map("website_url")
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  posts         Post[]
-  followers     Follower[]     @relation("followers")
-  following     Follower[]     @relation("following")
-  savedPosts    SavedPost[]
-  likedPosts    PostLike[]
-  postComments  PostComment[]
-  notifications Notification[]
-  commentLikes  CommentLike[]
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  username        String         @unique
+  password        String         @map("password_hash")
+  bio             String?
+  avatarUrl       String?        @map("avatar_url")
+  linkedinUrl     String?        @map("linkedin_url")
+  githubUrl       String?        @map("github_url")
+  instagramUrl    String?        @map("instagram_url")
+  twitterUrl      String?        @map("twitter_url")
+  websiteUrl      String?        @map("website_url")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  posts           Post[]
+  followers       Follower[]     @relation("followers")
+  following       Follower[]     @relation("following")
+  savedPosts      SavedPost[]
+  likedPosts      PostLike[]
+  postComments    PostComment[]
+  notifications   Notification[]
+  commentLikes    CommentLike[]
+  reportsMade     Report[]       @relation("reports_made")
+  reportsReceived Report[]       @relation("reports_received")
 
   @@map("users")
 }
@@ -43,6 +45,19 @@ model Follower {
   followingUser   User     @relation("following", fields: [followingUserId], references: [id])
 
   @@map("followers")
+}
+
+model Report {
+  id             String   @id @default(uuid())
+  reportedById   String
+  reportedUserId String
+  reportedBy     User     @relation("reports_made", fields: [reportedById], references: [id])
+  reportedUser   User     @relation("reports_received", fields: [reportedUserId], references: [id])
+  reason         String
+  description    String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("reports")
 }
 
 model Post {

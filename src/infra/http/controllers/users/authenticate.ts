@@ -1,18 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
 
 import { WrongCredentialsError } from '@/domain/blog/application/use-cases/errors/wrong-credentials-error'
 import { makeAuthenticateAuthorUseCase } from '@/infra/database/prisma/factories/make-authenticate-author-use-case'
+
+import { authenticateAuthorBodySchema } from './schemas'
 
 export async function authenticate(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const authenticateAuthorBodySchema = z.object({
-    password: z.string().min(8),
-    email: z.string().email(),
-  })
-
   const { password, email } = authenticateAuthorBodySchema.parse(request.body)
 
   const authenticateAuthorUseCase = makeAuthenticateAuthorUseCase(reply)
