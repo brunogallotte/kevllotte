@@ -78,3 +78,7 @@ export const editPostCommentBodySchema = z.object({
 export const editPostCommentParamsSchema = z.object({
   commentId: z.string().uuid(),
 })
+
+export const fetchPostLikesParamsSchema = z.object({
+  postId: z.string().uuid(),
+})

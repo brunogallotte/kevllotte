@@ -1,4 +1,5 @@
 import { DomainEvents } from '@/core/events/domain-events'
+import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { PostLikesRepository } from '@/domain/blog/application/repositories/post-likes-repository'
 import type { PostLike } from '@/domain/blog/enterprise/entities/post-like'
 
@@ -17,6 +18,14 @@ export class InMemoryPostLikesRepository implements PostLikesRepository {
     }
 
     return postLike
+  }
+
+  async findManyByPostId(postId: string, { page }: PaginationParams) {
+    const postlikes = this.items
+      .filter((item) => item.postId.toString() === postId)
+      .slice((page - 1) * 20, page * 20)
+
+    return postlikes
   }
 
   async create(postLike: PostLike) {

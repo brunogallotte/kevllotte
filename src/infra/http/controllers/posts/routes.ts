@@ -9,6 +9,7 @@ import { deletePost } from './delete'
 import { edit } from './edit'
 import { editComment } from './edit-post-comment'
 import { fetchPostComments } from './fetch-post-comments'
+import { fetchPostLikes } from './fetch-post-likes'
 import { fetchPostTags } from './fetch-post-tags'
 import { fetchPosts } from './fetch-posts'
 import { fetchSavedPosts } from './fetch-saved-posts'
@@ -29,6 +30,7 @@ import {
   editPostCommentParamsSchema,
   editPostParamsSchema,
   fetchPostCommentsParamsSchema,
+  fetchPostLikesParamsSchema,
   fetchPostTagsParamsSchema,
   likeCommentParamsSchema,
   likePostParamsSchema,
@@ -300,5 +302,22 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       fetchSavedPosts,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/posts/:postId/likes',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Fetch post likes',
+          security: [{ bearerAuth: [] }],
+          params: fetchPostLikesParamsSchema,
+          querystring: paginationQuerySchema,
+        },
+      },
+      fetchPostLikes,
     )
 }

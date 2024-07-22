@@ -1,3 +1,4 @@
+import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { PostLikesRepository } from '@/domain/blog/application/repositories/post-likes-repository'
 import type { PostLike } from '@/domain/blog/enterprise/entities/post-like'
 import { prisma } from '@/lib/prisma'
@@ -18,6 +19,18 @@ export class PrismaPostLikesRepository implements PostLikesRepository {
     }
 
     return PrismaPostLikeMapper.toDomain(postLike)
+  }
+
+  async findManyByPostId(postId: string, { page }: PaginationParams) {
+    const postLikes = await prisma.postLike.findMany({
+      where: {
+        postId,
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    return postLikes.map((postLike) => PrismaPostLikeMapper.toDomain(postLike))
   }
 
   async create(postLike: PostLike) {
