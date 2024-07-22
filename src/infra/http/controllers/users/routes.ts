@@ -7,6 +7,7 @@ import { authenticate } from './authenticate'
 import { deleteUser } from './delete'
 import { edit } from './edit'
 import { fetchPosts } from './fetch-author-posts'
+import { followAuthor } from './follow-author'
 import { profile } from './profile'
 import { refresh } from './refresh'
 import { register } from './register'
@@ -14,8 +15,11 @@ import { report } from './report'
 import {
   authenticateAuthorBodySchema,
   createReportBodySchema,
+  followAuthorParamsSchema,
   registerAuthorBodySchema,
+  unfollowAuthorParamsSchema,
 } from './schemas'
+import { unfollowAuthor } from './unfollow-author'
 
 export async function userRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -193,5 +197,37 @@ export async function userRoutes(app: FastifyInstance) {
         },
       },
       report,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/users/follow/:followingAuthorId',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Follow a user',
+          security: [{ bearerAuth: [] }],
+          params: followAuthorParamsSchema,
+        },
+      },
+      followAuthor,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .delete(
+      '/users/follow/:followId',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Unfollow a user',
+          security: [{ bearerAuth: [] }],
+          params: unfollowAuthorParamsSchema,
+        },
+      },
+      unfollowAuthor,
     )
 }

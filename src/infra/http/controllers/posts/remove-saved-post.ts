@@ -28,5 +28,5 @@ export async function removeSavedPost(
     }
   }
 
-  return reply.status(200).send()
+  return reply.status(204).send()
 }

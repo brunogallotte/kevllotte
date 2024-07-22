@@ -17,14 +17,14 @@ describe('Delete Post', () => {
   })
 
   it('should be able to delete a post', async () => {
-    const newPost = makePost(
+    const post = makePost(
       {
         authorId: new UniqueEntityID('author-1'),
       },
       new UniqueEntityID('post-1'),
     )
 
-    await inMemoryPostsRepository.create(newPost)
+    await inMemoryPostsRepository.create(post)
 
     const result = await sut.execute({
       authorId: 'author-1',
@@ -36,14 +36,14 @@ describe('Delete Post', () => {
   })
 
   it('should not be able to delete a post from another user', async () => {
-    const newPost = makePost(
+    const post = makePost(
       {
         authorId: new UniqueEntityID('author-1'),
       },
       new UniqueEntityID('post-1'),
     )
 
-    await inMemoryPostsRepository.create(newPost)
+    await inMemoryPostsRepository.create(post)
 
     const result = await sut.execute({
       authorId: 'author-2',

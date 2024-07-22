@@ -38,6 +38,6 @@ describe('Delete Post (e2e)', () => {
         postId,
       })
 
-    expect(deletePostResponse.statusCode).toEqual(200)
+    expect(deletePostResponse.statusCode).toEqual(204)
   })
 })

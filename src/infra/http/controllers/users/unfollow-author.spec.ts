@@ -1,20 +1,17 @@
 import request from 'supertest'
 import { AuthorFactory } from 'test/factories/make-author'
-import { PostFactory } from 'test/factories/make-post'
-import { PostLikeFactory } from 'test/factories/make-post-like'
+import { FollowFactory } from 'test/factories/make-follow'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Remove Post Post (e2e)', () => {
+describe('Unfollow Author (e2e)', () => {
   let authorFactory: AuthorFactory
-  let postFactory: PostFactory
-  let postLikeFactory: PostLikeFactory
+  let followFactory: FollowFactory
 
   beforeAll(async () => {
     authorFactory = new AuthorFactory()
-    postFactory = new PostFactory()
-    postLikeFactory = new PostLikeFactory()
+    followFactory = new FollowFactory()
 
     await app.ready()
   })
@@ -23,24 +20,22 @@ describe('Remove Post Post (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to remove a post like', async () => {
+  it('should be able to unfollow an author', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
     const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
-    const post = await postFactory.makePrismaPost({
-      authorId: user.id,
+    const anotherUser = await authorFactory.makePrismaAuthor()
+
+    const follow = await followFactory.makePrismaFollow({
+      followerAuthorId: user.id,
+      followingAuthorId: anotherUser.id,
     })
 
-    const postId = post.id.toString()
-
-    await postLikeFactory.makePrismaPostLike({
-      authorId: user.id,
-      postId: post.id,
-    })
+    const followId = follow.id.toString()
 
     const response = await request(app.server)
-      .delete(`/posts/${postId}/likes`)
+      .delete(`/users/follow/${followId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

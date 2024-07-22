@@ -46,3 +46,11 @@ export const createReportBodySchema = z.object({
   reason: z.string(),
   description: z.string(),
 })
+
+export const followAuthorParamsSchema = z.object({
+  followingAuthorId: z.string().uuid(),
+})
+
+export const unfollowAuthorParamsSchema = z.object({
+  followId: z.string().uuid(),
+})

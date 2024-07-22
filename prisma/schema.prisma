@@ -23,8 +23,8 @@ model User {
   createdAt       DateTime       @default(now()) @map("created_at")
   updatedAt       DateTime       @updatedAt @map("updated_at")
   posts           Post[]
-  followers       Follower[]     @relation("followers")
-  following       Follower[]     @relation("following")
+  followers       Follow[]       @relation("followers")
+  following       Follow[]       @relation("following")
   savedPosts      SavedPost[]
   likedPosts      PostLike[]
   postComments    PostComment[]
@@ -36,7 +36,7 @@ model User {
   @@map("users")
 }
 
-model Follower {
+model Follow {
   id              String   @id @default(uuid())
   followerUserId  String   @map("follower_user_id")
   followingUserId String   @map("following_user_id")
@@ -44,7 +44,7 @@ model Follower {
   follower        User     @relation("followers", fields: [followerUserId], references: [id])
   followingUser   User     @relation("following", fields: [followingUserId], references: [id])
 
-  @@map("followers")
+  @@map("follows")
 }
 
 model Report {

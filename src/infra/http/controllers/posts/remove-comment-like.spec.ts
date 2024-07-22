@@ -54,6 +54,6 @@ describe('Remove Comment Like (e2e)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    expect(response.statusCode).toEqual(200)
+    expect(response.statusCode).toEqual(204)
   })
 })

@@ -34,5 +34,5 @@ export async function removePostLike(
     }
   }
 
-  return reply.status(200).send()
+  return reply.status(204).send()
 }

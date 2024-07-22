@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
+// TODO: CREATE READ FEATURE AND SOME OTHER USING THIS ENTITY
 type ReaderProps = {
   name: string
   email: string

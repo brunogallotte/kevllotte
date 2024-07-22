@@ -31,5 +31,5 @@ export async function deletePost(request: FastifyRequest, reply: FastifyReply) {
     }
   }
 
-  return reply.status(200).send()
+  return reply.status(204).send()
 }

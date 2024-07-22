@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Delete Author (e2e)', () => {
+describe('Follow Author (e2e)', () => {
   let authorFactory: AuthorFactory
 
   beforeAll(async () => {
@@ -17,16 +17,27 @@ describe('Delete Author (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to delete an author', async () => {
+  it('should be able to follow an author', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
     const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
-    const profileResponse = await request(app.server)
-      .delete('/users/delete')
+    const anotherUser = await authorFactory.makePrismaAuthor()
+
+    const userId = user.id.toString()
+    const anotherUserId = anotherUser.id.toString()
+
+    const response = await request(app.server)
+      .post(`/users/follow/${anotherUserId}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    expect(profileResponse.statusCode).toEqual(204)
+    expect(response.statusCode).toEqual(200)
+    expect(response.body).toEqual({
+      follow: expect.objectContaining({
+        followerAuthorId: userId,
+        followingAuthorId: anotherUserId,
+      }),
+    })
   })
 })
