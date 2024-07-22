@@ -3,9 +3,12 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { auth } from '../../middlewares/auth'
+import { paginationQuerySchema } from '../schemas'
 import { authenticate } from './authenticate'
 import { deleteUser } from './delete'
 import { edit } from './edit'
+import { fetchAuthorFollowers } from './fetch-author-followers'
+import { fetchAuthorFollowings } from './fetch-author-followings'
 import { fetchPosts } from './fetch-author-posts'
 import { followAuthor } from './follow-author'
 import { profile } from './profile'
@@ -229,5 +232,37 @@ export async function userRoutes(app: FastifyInstance) {
         },
       },
       unfollowAuthor,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/users/followers',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Fetch user followers',
+          security: [{ bearerAuth: [] }],
+          querystring: paginationQuerySchema,
+        },
+      },
+      fetchAuthorFollowers,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/users/followings',
+      {
+        schema: {
+          tags: ['Users'],
+          summary: 'Fetch user followings',
+          security: [{ bearerAuth: [] }],
+          querystring: paginationQuerySchema,
+        },
+      },
+      fetchAuthorFollowings,
     )
 }
