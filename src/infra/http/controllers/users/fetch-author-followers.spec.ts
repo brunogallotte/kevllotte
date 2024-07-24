@@ -39,8 +39,10 @@ describe('Fetch Author Followers (e2e)', () => {
       }),
     ])
 
+    const userId = user.id.toString()
+
     const response = await request(app.server)
-      .get('/users/followers')
+      .get(`/users/${userId}/followers`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

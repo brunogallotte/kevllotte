@@ -54,3 +54,11 @@ export const followAuthorParamsSchema = z.object({
 export const unfollowAuthorParamsSchema = z.object({
   followId: z.string().uuid(),
 })
+
+export const fetchAuthorFollowersParamsSchema = z.object({
+  authorId: z.string().uuid(),
+})
+
+export const fetchAuthorFollowingsParamsSchema = z.object({
+  authorId: z.string().uuid(),
+})

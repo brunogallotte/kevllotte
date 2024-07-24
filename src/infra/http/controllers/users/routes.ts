@@ -18,6 +18,8 @@ import { report } from './report'
 import {
   authenticateAuthorBodySchema,
   createReportBodySchema,
+  fetchAuthorFollowersParamsSchema,
+  fetchAuthorFollowingsParamsSchema,
   followAuthorParamsSchema,
   registerAuthorBodySchema,
   unfollowAuthorParamsSchema,
@@ -238,12 +240,13 @@ export async function userRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/users/followers',
+      '/users/:authorId/followers',
       {
         schema: {
           tags: ['Users'],
           summary: 'Fetch user followers',
           security: [{ bearerAuth: [] }],
+          params: fetchAuthorFollowersParamsSchema,
           querystring: paginationQuerySchema,
         },
       },
@@ -254,12 +257,13 @@ export async function userRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/users/followings',
+      '/users/:authorId/followings',
       {
         schema: {
           tags: ['Users'],
           summary: 'Fetch user followings',
           security: [{ bearerAuth: [] }],
+          params: fetchAuthorFollowingsParamsSchema,
           querystring: paginationQuerySchema,
         },
       },

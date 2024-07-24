@@ -4,14 +4,15 @@ import { makeFetchAuthorFollowingsUseCase } from '@/infra/database/prisma/factor
 
 import { FollowPresenter } from '../../presenters/follow-presenter'
 import { paginationQuerySchema } from '../schemas'
+import { fetchAuthorFollowingsParamsSchema } from './schemas'
 
 export async function fetchAuthorFollowings(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const authorId = await request.getCurrentUserId()
-
   const { page } = paginationQuerySchema.parse(request.query)
+
+  const { authorId } = fetchAuthorFollowingsParamsSchema.parse(request.params)
 
   const fetchAuthorFollowingsUseCase = makeFetchAuthorFollowingsUseCase()
 
