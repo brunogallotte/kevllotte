@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 export type ReportProps = {
   reportedById: UniqueEntityID
   reason: string
-  description: string
+  description?: string
   createdAt: Date
 }
 

@@ -8,7 +8,7 @@ export type CreateAuthorReportUseCaseRequest = {
   reportedById: string
   reportedAuthorId: string
   reason: string
-  description: string
+  description?: string
 }
 
 type CreateAuthorReportUseCaseResponse = Either<

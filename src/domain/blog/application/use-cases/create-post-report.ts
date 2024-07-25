@@ -8,7 +8,7 @@ export type CreatePostReportUseCaseRequest = {
   reportedById: string
   reportedPostId: string
   reason: string
-  description: string
+  description?: string
 }
 
 type CreatePostReportUseCaseResponse = Either<

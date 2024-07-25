@@ -89,5 +89,5 @@ export const createPostReportParamsSchema = z.object({
 
 export const createPostReportBodySchema = z.object({
   reason: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
 })

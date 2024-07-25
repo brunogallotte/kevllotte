@@ -47,7 +47,7 @@ export const createAuthorReportParamsSchema = z.object({
 
 export const createAuthorReportBodySchema = z.object({
   reason: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
 })
 
 export const followAuthorParamsSchema = z.object({

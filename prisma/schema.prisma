@@ -55,7 +55,7 @@ model UserReport {
   reportedBy     User     @relation("user_reports_made", fields: [reportedById], references: [id])
   reportedUser   User     @relation("user_reports_received", fields: [reportedUserId], references: [id])
   reason         String
-  description    String
+  description    String?
   createdAt      DateTime @default(now()) @map("created_at")
 
   @@map("user_reports")
@@ -68,7 +68,7 @@ model PostReport {
   reportedBy     User     @relation("post_reports_made", fields: [reportedById], references: [id])
   reportedPost   Post     @relation(fields: [reportedPostId], references: [id])
   reason         String
-  description    String
+  description    String?
   createdAt      DateTime @default(now()) @map("created_at")
 
   @@map("post_reports")
