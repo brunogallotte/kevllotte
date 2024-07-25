@@ -1,19 +1,27 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeCreateReportUseCase } from '@/infra/database/prisma/factories/make-create-report-use-case'
+import { makeCreateAuthorReportUseCase } from '@/infra/database/prisma/factories/make-create-author-report-use-case'
 
-import { ReportPresenter } from '../../presenters/report-presenter'
-import { createReportBodySchema } from './schemas'
+import { AuthorReportPresenter } from '../../presenters/author-report-presenter'
+import {
+  createAuthorReportBodySchema,
+  createAuthorReportParamsSchema,
+} from './schemas'
 
 export async function report(request: FastifyRequest, reply: FastifyReply) {
   const authorId = await request.getCurrentUserId()
 
-  const createReportUseCase = makeCreateReportUseCase()
+  const createAuthorReportUseCase = makeCreateAuthorReportUseCase()
 
-  const { reportedAuthorId, reason, description } =
-    createReportBodySchema.parse(request.body)
+  const { reportedAuthorId } = createAuthorReportParamsSchema.parse(
+    request.params,
+  )
 
-  const result = await createReportUseCase.execute({
+  const { reason, description } = createAuthorReportBodySchema.parse(
+    request.body,
+  )
+
+  const result = await createAuthorReportUseCase.execute({
     reportedById: authorId,
     reportedAuthorId,
     reason,
@@ -24,7 +32,9 @@ export async function report(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send()
   }
 
-  const report = result.value.report
+  const authorReport = result.value.authorReport
 
-  return reply.status(201).send({ report: ReportPresenter.toHTTP(report) })
+  return reply
+    .status(201)
+    .send({ report: AuthorReportPresenter.toHTTP(authorReport) })
 }

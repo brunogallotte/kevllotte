@@ -1,9 +1,11 @@
 import type { PaginationParams } from '@/core/repositories/pagination-params'
-import type { ReportsRepository } from '@/domain/blog/application/repositories/reports-repository'
-import type { Report } from '@/domain/blog/enterprise/entities/report'
+import type { AuthorReportsRepository } from '@/domain/blog/application/repositories/author-reports-repository'
+import type { AuthorReport } from '@/domain/blog/enterprise/entities/author-report'
 
-export class InMemoryReportsRepository implements ReportsRepository {
-  public items: Report[] = []
+export class InMemoryAuthorReportsRepository
+  implements AuthorReportsRepository
+{
+  public items: AuthorReport[] = []
 
   async findById(id: string) {
     const report = this.items.find((report) => report.id.toString() === id)
@@ -23,13 +25,13 @@ export class InMemoryReportsRepository implements ReportsRepository {
     return reports
   }
 
-  async delete(report: Report) {
+  async delete(report: AuthorReport) {
     const itemIndex = this.items.findIndex((item) => item.id === report.id)
 
     this.items.splice(itemIndex, 1)
   }
 
-  async create(report: Report) {
+  async create(report: AuthorReport) {
     this.items.push(report)
   }
 }

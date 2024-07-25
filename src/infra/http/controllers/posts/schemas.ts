@@ -82,3 +82,12 @@ export const editPostCommentParamsSchema = z.object({
 export const fetchPostLikesParamsSchema = z.object({
   postId: z.string().uuid(),
 })
+
+export const createPostReportParamsSchema = z.object({
+  reportedPostId: z.string().uuid(),
+})
+
+export const createPostReportBodySchema = z.object({
+  reason: z.string(),
+  description: z.string(),
+})

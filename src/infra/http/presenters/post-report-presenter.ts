@@ -1,11 +1,11 @@
-import type { Report } from '@/domain/blog/enterprise/entities/report'
+import type { PostReport } from '@/domain/blog/enterprise/entities/post-report'
 
-export class ReportPresenter {
-  static toHTTP(report: Report) {
+export class PostReportPresenter {
+  static toHTTP(report: PostReport) {
     return {
       id: report.id.toString(),
       reportedById: report.reportedById.toString(),
-      reportedAuthorId: report.reportedAuthorId.toString(),
+      reportedPostId: report.reportedPostId.toString(),
       reason: report.reason,
       description: report.description,
       createdAt: report.createdAt,

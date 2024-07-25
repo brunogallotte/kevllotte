@@ -1,11 +1,11 @@
-import { type Prisma, Report as PrismaReport } from '@prisma/client'
+import { type Prisma, UserReport as PrismaAuthorReport } from '@prisma/client'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Report } from '@/domain/blog/enterprise/entities/report'
+import { AuthorReport } from '@/domain/blog/enterprise/entities/author-report'
 
-export class PrismaReportMapper {
-  static toDomain(raw: PrismaReport): Report {
-    return Report.create(
+export class PrismaAuthorReportMapper {
+  static toDomain(raw: PrismaAuthorReport): AuthorReport {
+    return AuthorReport.create(
       {
         reportedById: new UniqueEntityID(raw.reportedById),
         reportedAuthorId: new UniqueEntityID(raw.reportedUserId),
@@ -17,7 +17,7 @@ export class PrismaReportMapper {
     )
   }
 
-  static toPrisma(report: Report): Prisma.ReportUncheckedCreateInput {
+  static toPrisma(report: AuthorReport): Prisma.UserReportUncheckedCreateInput {
     return {
       id: report.id.toString(),
       reportedById: report.reportedById.toString(),

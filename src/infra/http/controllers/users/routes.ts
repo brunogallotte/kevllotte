@@ -17,7 +17,8 @@ import { register } from './register'
 import { report } from './report'
 import {
   authenticateAuthorBodySchema,
-  createReportBodySchema,
+  createAuthorReportBodySchema,
+  createAuthorReportParamsSchema,
   fetchAuthorFollowersParamsSchema,
   fetchAuthorFollowingsParamsSchema,
   followAuthorParamsSchema,
@@ -192,13 +193,14 @@ export async function userRoutes(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/users/report',
+      '/users/:reportedAuthorId/report',
       {
         schema: {
           tags: ['Users'],
           summary: 'Report a user',
           security: [{ bearerAuth: [] }],
-          body: createReportBodySchema,
+          params: createAuthorReportParamsSchema,
+          body: createAuthorReportBodySchema,
         },
       },
       report,

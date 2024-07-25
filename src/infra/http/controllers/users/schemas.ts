@@ -41,8 +41,11 @@ export const fetchAuthorPostsQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1),
 })
 
-export const createReportBodySchema = z.object({
+export const createAuthorReportParamsSchema = z.object({
   reportedAuthorId: z.string().uuid(),
+})
+
+export const createAuthorReportBodySchema = z.object({
   reason: z.string(),
   description: z.string(),
 })

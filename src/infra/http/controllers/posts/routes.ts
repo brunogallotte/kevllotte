@@ -19,11 +19,14 @@ import { removeCommentLike } from './remove-comment-like'
 import { removePostLike } from './remove-post-like'
 import { removeSavedPost } from './remove-saved-post'
 import { replyToComment } from './reply-to-comment'
+import { report } from './report'
 import { save } from './save-post'
 import {
   commentOnPostBodySchema,
   commentOnPostParamsSchema,
   createPostBodySchema,
+  createPostReportBodySchema,
+  createPostReportParamsSchema,
   deletePostBodySchema,
   editPostBodySchema,
   editPostCommentBodySchema,
@@ -319,5 +322,22 @@ export async function postRoutes(app: FastifyInstance) {
         },
       },
       fetchPostLikes,
+    )
+
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .post(
+      '/posts/:reportedPostId/report',
+      {
+        schema: {
+          tags: ['Posts'],
+          summary: 'Report a post',
+          security: [{ bearerAuth: [] }],
+          params: createPostReportParamsSchema,
+          body: createPostReportBodySchema,
+        },
+      },
+      report,
     )
 }

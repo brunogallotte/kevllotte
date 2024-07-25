@@ -1,14 +1,17 @@
 import request from 'supertest'
 import { AuthorFactory } from 'test/factories/make-author'
+import { PostFactory } from 'test/factories/make-post'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '../../app'
 
-describe('Report Author (e2e)', () => {
+describe('Report Post (e2e)', () => {
   let authorFactory: AuthorFactory
+  let postFactory: PostFactory
 
   beforeAll(async () => {
     authorFactory = new AuthorFactory()
+    postFactory = new PostFactory()
 
     await app.ready()
   })
@@ -17,18 +20,20 @@ describe('Report Author (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to report an author', async () => {
+  it('should be able to report a post', async () => {
     const user = await authorFactory.makePrismaAuthor()
 
     const accessToken = app.jwt.sign({ sub: user.id.toString() })
 
-    const anotherUser = await authorFactory.makePrismaAuthor()
+    const post = await postFactory.makePrismaPost({
+      authorId: user.id,
+    })
 
     const userId = user.id.toString()
-    const anotherUserId = anotherUser.id.toString()
+    const postId = post.id.toString()
 
     const response = await request(app.server)
-      .post(`/users/${anotherUserId}/report`)
+      .post(`/posts/${postId}/report`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         reason: 'Report reason',
@@ -39,7 +44,7 @@ describe('Report Author (e2e)', () => {
     expect(response.body).toEqual({
       report: expect.objectContaining({
         reportedById: userId,
-        reportedAuthorId: anotherUserId,
+        reportedPostId: postId,
         reason: 'Report reason',
         description: 'Report description',
       }),

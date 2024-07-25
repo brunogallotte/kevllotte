@@ -1,22 +1,18 @@
-import { Entity } from '@/core/entities/entity'
+import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import type { Optional } from '@/core/types/optional'
 
 export type ReportProps = {
   reportedById: UniqueEntityID
-  reportedAuthorId: UniqueEntityID
   reason: string
   description: string
   createdAt: Date
 }
 
-export class Report extends Entity<ReportProps> {
+export abstract class Report<
+  Props extends ReportProps,
+> extends AggregateRoot<Props> {
   get reportedById() {
     return this.props.reportedById
-  }
-
-  get reportedAuthorId() {
-    return this.props.reportedAuthorId
   }
 
   get reason() {
@@ -29,20 +25,5 @@ export class Report extends Entity<ReportProps> {
 
   get createdAt() {
     return this.props.createdAt
-  }
-
-  static create(
-    props: Optional<ReportProps, 'createdAt'>,
-    id?: UniqueEntityID,
-  ) {
-    const report = new Report(
-      {
-        ...props,
-        createdAt: props.createdAt ?? new Date(),
-      },
-      id,
-    )
-
-    return report
   }
 }
